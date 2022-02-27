@@ -24,6 +24,6 @@ namespace VircadiaNative
     public static class Info
     {
       [DllImport(DLLConstants.Import)]
-      public static extern IntPtr vircadia_sdk_version();
+      public static extern IntPtr vircadia_client_version();
     }
 }

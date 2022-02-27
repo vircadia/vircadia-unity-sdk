@@ -27,7 +27,7 @@ namespace Vircadia
 
         public static VersionData NativeVersion()
         {
-            var nativeData = Marshal.PtrToStructure<VircadiaNative.version_data>(VircadiaNative.Info.vircadia_sdk_version());
+            var nativeData = Marshal.PtrToStructure<VircadiaNative.version_data>(VircadiaNative.Info.vircadia_client_version());
             return new VersionData
             {
                 major = nativeData.major,

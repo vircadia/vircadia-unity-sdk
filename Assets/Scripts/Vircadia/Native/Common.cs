@@ -13,7 +13,7 @@ namespace VircadiaNative
       #if UNITY_IOS || UNITY_TVOS
       public const string Import = "__Internal";
       #else
-      public const string Import = "vircadia-sdk";
+      public const string Import = "vircadia-client";
       #endif
     }
 }

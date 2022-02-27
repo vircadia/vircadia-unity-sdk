@@ -15,7 +15,7 @@ public class Info
     public void BasicSimplePasses()
     {
         var version = Vircadia.Info.NativeVersion();
-        Log.WriteLine("Native SDK version is " + version.full);
+        Log.WriteLine("Native Client API version is " + version.full);
 
         Assert.IsTrue(version.major >= 0);
         Assert.IsTrue(version.minor >= 0);
