@@ -1,5 +1,5 @@
 {
-    "name": "UnitTests",
+    "name": "VircadiaSDKRuntimeTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
