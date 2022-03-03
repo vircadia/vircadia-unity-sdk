@@ -16,6 +16,8 @@ test:
 package: test
 	tar --xform s:'./':: -czvf $(PACKAGE) -C ./Packages/com.vircadia.unitysdk ./
 
+docs:
+	doxygen ./docs/Doxyfile
 
 clean-tests:
 	-rm $(TEST_RESULT)
