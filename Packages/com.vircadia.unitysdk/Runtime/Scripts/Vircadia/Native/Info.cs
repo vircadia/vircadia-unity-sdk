@@ -16,9 +16,9 @@ namespace VircadiaNative
 {
     public struct version_data
     {
+        public int year;
         public int major;
         public int minor;
-        public int tweak;
         public IntPtr commit;
         public IntPtr number;
         public IntPtr full;

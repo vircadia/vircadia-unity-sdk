@@ -21,19 +21,19 @@ namespace Vircadia
     public class VersionData
     {
         /// <summary>
-        /// The major version number, increments on compatibility breaking changes.
+        /// The year of the release number, updated with the first release of the year, either minor or major.
+        /// </summary>
+        public int year;
+
+        /// <summary>
+        /// The major version number, increments with API breaking changes.
         /// </summary>
         public int major;
 
         /// <summary>
-        /// The minor version number, increments on backwards compatible API addition or major implementation changes.
+        /// The minor version number, increments with backward compatible API changes/additions, bug fixes and implementation changes.
         /// </summary>
         public int minor;
-
-        /// <summary>
-        /// The tweak version number, increments on bug fixes and minor implementation changes.
-        /// </summary>
-        public int tweak;
 
         /// <summary>
         /// Short VCS identifier.
@@ -41,12 +41,12 @@ namespace Vircadia
         public string commit;
 
         /// <summary>
-        /// Formatted version number string, contains <see cref="P:Vircadia.Info.VersionData.major">major</see>, <see cref="P:Vircadia.Info.VersionData.minor">minor</see> and <see cref="P:Vircadia.Info.VersionData.tweak">tweak</see>.
+        /// Formatted version number string, contains <see cref="P:Vircadia.Info.VersionData.major">major</see> and <see cref="P:Vircadia.Info.VersionData.minor">minor</see>.
         /// </summary>
         public string number;
 
         /// <summary>
-        /// Formatted version string, contains <see cref="P:Vircadia.Info.VersionData.major">major</see>, <see cref="P:Vircadia.Info.VersionData.minor">minor</see>, <see cref="P:Vircadia.Info.VersionData.tweak">tweak</see> and <see cref="P:Vircadia.Info.VersionData.commit">commit</see>.
+        /// Formatted version string, contains <see cref="P:Vircadia.Info.VersionData.year">year</see>, <see cref="P:Vircadia.Info.VersionData.major">major</see>, <see cref="P:Vircadia.Info.VersionData.minor">minor</see> and <see cref="P:Vircadia.Info.VersionData.commit">commit</see>.
         /// </summary>
         public string full;
     }
@@ -66,9 +66,9 @@ namespace Vircadia
             var nativeData = Marshal.PtrToStructure<VircadiaNative.version_data>(VircadiaNative.Info.vircadia_client_version());
             return new VersionData
             {
+                year = nativeData.year,
                 major = nativeData.major,
                 minor = nativeData.minor,
-                tweak = nativeData.tweak,
                 commit = Marshal.PtrToStringUTF8(nativeData.commit),
                 number = Marshal.PtrToStringUTF8(nativeData.number),
                 full = Marshal.PtrToStringUTF8(nativeData.full)
