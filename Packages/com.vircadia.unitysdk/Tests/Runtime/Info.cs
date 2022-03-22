@@ -15,7 +15,7 @@ using NUnit.Framework;
 public class Info
 {
     [Test]
-    public void BasicSimplePasses()
+    public void VersionPasses()
     {
         var version = Vircadia.Info.NativeVersion();
         Log.WriteLine("Native Client API version is " + version.full);
