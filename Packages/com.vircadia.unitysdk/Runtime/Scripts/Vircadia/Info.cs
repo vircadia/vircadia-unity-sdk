@@ -1,6 +1,6 @@
 //
 //  Info.cs
-//  Scripts/Vircadia
+//  Runtime/Scripts/Vircadia
 //
 //  Created by Nshan G. on 18 Feb 2022.
 //  Copyright 2022 Vircadia contributors.
