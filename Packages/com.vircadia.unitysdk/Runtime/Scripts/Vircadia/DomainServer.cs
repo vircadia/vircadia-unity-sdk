@@ -15,29 +15,79 @@ using System.Runtime.InteropServices;
 namespace Vircadia
 {
 
+    /// <summary>
+    /// Optional fixed ports data.
+    /// </summary>
+    [System.Serializable]
     public struct Ports
     {
+        /// <summary>
+        /// UDP port for the client to listen on. (default: random port)
+        /// </summary>
         public int? listenPort;
+
+        /// <summary>
+        /// DTLS port for the client to listen on. (default: not used)
+        /// </summary>
         public int? dtlsListenPort;
     }
 
-
+    /// <summary>
+    /// Node (assignment client) data.
+    /// </summary>
     public struct Node
     {
+        /// <summary>
+        /// Type of the node.
+        /// </summary>
         public byte type;
+
+        /// <summary>
+        /// Indicated weather the node is active, or not.
+        /// </summary>
         public bool active;
+
+        /// <summary>
+        /// A human readable address/port representation.
+        /// </summary>
         public string address;
+
+        /// <summary>
+        /// A universal unique ID of the node (the string representation might not match between implementations)
+        /// </summary>
         public Guid uuid;
     }
 
+    /// <summary>
+    /// Possible states of the <see cref="P:Vircadia.Client.DomainServer">DomainServer</see> class.
+    /// </summary>
     public enum DomainServerStatus
     {
+        /// <summary>
+        /// Successfully Connected to a domain server, specified with <see cref="P:Vircadia.Client.DomainServer.Connect">Connect</see> method.
+        /// </summary>
         Connected,
+
+        /// <summary>
+        /// Not yet connected to any domain server.
+        /// </summary>
         Disconnected,
+
+        /// <summary>
+        /// Connection or initialization error.
+        /// TODO: Finer grained errors
+        /// </summary>
         Error,
+
+        /// <summary>
+        /// Native API reported connection status that this implementation does not recognize.
+        /// </summary>
         Unknown
     }
 
+    /// <summary>
+    /// Initializes the client and provides an API for domain server connection.
+    /// </summary>
     public class DomainServer
     {
 
@@ -59,6 +109,16 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// Initializes the client and provides an API for domain server connection.
+        /// </summary>
+        /// <param name="ports"> Optional fixed ports to use. </param>
+        /// <param name="platformInfo"> Optional platform infomration. TODO: clarify the format. </param>
+        /// <param name="userAgent"> User agent string to use when connecting to Metaverse server (default: platform specific). </param>
+        /// <param name="appName"> Client application name, used for settings and log files (default: VircadiaClient). </param>
+        /// <param name="appOrganization"> Client application organization name, used for settings and log file directory (default: Vircadia). </param>
+        /// <param name="appDomain"> Client application domain name. (default: vircadia.com). TODO: figure out what this is for. </param>
+        /// <param name="appVersion"> Client application version. (default: native API version). </param>
         public DomainServer
         (
             Ports? ports = null,
@@ -106,6 +166,10 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// Connect or jump to specified location.
+        /// </summary>
+        /// <param name="location">The address to go to: a "hifi://" address, an IP address (e.g., "127.0.0.1" or "localhost"), a file:/// address, a domain name, a named path on a domain (starts with "/"), a position or position and orientation, or a user (starts with "@").</param>
         public void Connect(string location)
         {
             IntPtr locationPtr = IntPtr.Zero;
@@ -114,6 +178,9 @@ namespace Vircadia
             DestroyUnmanaged(locationPtr, location);
         }
 
+        /// <summary>
+        /// The current status.
+        /// </summary>
         public DomainServerStatus Status
         {
             get
@@ -141,6 +208,9 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// A list of connected nodes (assignment clients).
+        /// </summary>
         public Node[] Nodes
         {
             get
