@@ -34,7 +34,7 @@ public class DomainServer
                 {
                     for (int other = one + 1; other < nodes.Length; ++other)
                     {
-                        Assert.AreNotEqual(nodes[one], nodes[other]);
+                        Assert.AreNotEqual(nodes[one].uuid, nodes[other].uuid);
                     }
                 }
 
