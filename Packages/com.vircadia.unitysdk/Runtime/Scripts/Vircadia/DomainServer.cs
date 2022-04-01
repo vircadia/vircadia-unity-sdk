@@ -98,25 +98,6 @@ namespace Vircadia
     public class DomainServer
     {
 
-        private int _context;
-        private MessagesClient messages;
-
-        static void CreateUnmanaged(ref IntPtr param, string value)
-        {
-            if (value != null)
-            {
-                param = Marshal.StringToCoTaskMemUTF8(value);
-            }
-        }
-
-        static void DestroyUnmanaged(IntPtr param, string value)
-        {
-            if (value != null)
-            {
-                Marshal.FreeCoTaskMem(param);
-            }
-        }
-
         /// <summary>
         /// Initializes the client and provides an API for domain server
         /// connection.
@@ -162,21 +143,18 @@ namespace Vircadia
                 }
             }
 
-            CreateUnmanaged(ref parameters.platform_info, platformInfo);
-            CreateUnmanaged(ref parameters.user_agent, userAgent);
+            Utils.CreateUnmanaged(ref parameters.platform_info, platformInfo);
+            Utils.CreateUnmanaged(ref parameters.user_agent, userAgent);
 
             this._context = VircadiaNative.Context.vircadia_create_context(parameters);
 
-            DestroyUnmanaged(parameters.platform_info, platformInfo);
-            DestroyUnmanaged(parameters.user_agent, userAgent);
+            Utils.DestroyUnmanaged(parameters.platform_info, platformInfo);
+            Utils.DestroyUnmanaged(parameters.user_agent, userAgent);
 
-            if (this._context >= 0)
-            {
-                messages = new MessagesClient(this);
-            }
+            Messages = this._context >= 0 ? new MessagesClient(this) : null;
         }
 
-        ~DomainServer()
+        public void Destroy()
         {
             if (this._context < 0)
             {
@@ -187,6 +165,11 @@ namespace Vircadia
             {
                 // TODO: report error somehow
             }
+        }
+
+        ~DomainServer()
+        {
+            Destroy();
         }
 
         /// <summary>
@@ -200,9 +183,9 @@ namespace Vircadia
         public void Connect(string location)
         {
             IntPtr locationPtr = IntPtr.Zero;
-            CreateUnmanaged(ref locationPtr, location);
+            Utils.CreateUnmanaged(ref locationPtr, location);
             VircadiaNative.NodeList.vircadia_connect(this._context, locationPtr);
-            DestroyUnmanaged(locationPtr, location);
+            Utils.DestroyUnmanaged(locationPtr, location);
         }
 
         /// <summary>
@@ -259,14 +242,13 @@ namespace Vircadia
                 byte[] uuidBytes = new byte[16];
                 for (int i = 0; i < count ; ++i)
                 {
-                    IntPtr nativeUUID = VircadiaNative.NodeList.vircadia_node_uuid(this._context, i);
-                    if (nativeUUID == IntPtr.Zero)
+                    var uuid = Utils.getUUID(VircadiaNative.NodeList.vircadia_node_uuid(this._context, i));
+                    if (uuid == null)
                     {
                         return null;
                     }
+                    values[i].uuid = uuid.Value;
 
-                    Marshal.Copy(nativeUUID, uuidBytes, 0, uuidBytes.Length);
-                    values[i].uuid = new Guid(uuidBytes);
                     // TODO fill other node fields
                 }
 
@@ -274,9 +256,17 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// Accessors for the messaging functionality of the client.
+        /// </summary>
+        public MessagesClient Messages { get; private set; }
+
+
         internal int ContextId {
             get { return _context; }
         }
+
+        private int _context;
 
     }
 }
