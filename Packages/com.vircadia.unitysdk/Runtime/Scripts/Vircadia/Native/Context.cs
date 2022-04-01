@@ -1,5 +1,5 @@
 //
-//  Client.cs
+//  Context.cs
 //  Runtime/Scripts/Vircadia/Native
 //
 //  Created by Nshan G. on 21 Mar 2022.
@@ -32,7 +32,7 @@ namespace VircadiaNative
         public client_info info;
     }
 
-    public static class Client
+    public static class Context
     {
         [DllImport(DLLConstants.Import)]
         public static extern context_params vircadia_context_defaults();

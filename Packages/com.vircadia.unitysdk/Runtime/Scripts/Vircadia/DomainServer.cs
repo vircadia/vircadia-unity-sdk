@@ -53,18 +53,23 @@ namespace Vircadia
         public string address;
 
         /// <summary>
-        /// A universal unique ID of the node (the string representation might not match between implementations)
+        /// A universal unique ID of the node (the string representation
+        /// might not match between implementations)
         /// </summary>
         public Guid uuid;
     }
 
     /// <summary>
-    /// Possible states of the <see cref="P:Vircadia.Client.DomainServer">DomainServer</see> class.
+    /// Possible states of the <see
+    /// cref="Vircadia.DomainServer"> DomainServer </see>
+    /// class.
     /// </summary>
     public enum DomainServerStatus
     {
         /// <summary>
-        /// Successfully Connected to a domain server, specified with <see cref="P:Vircadia.Client.DomainServer.Connect">Connect</see> method.
+        /// Successfully Connected to a domain server, specified with
+        /// <see cref="Vircadia.DomainServer.Connect"> Connect
+        /// </see> method.
         /// </summary>
         Connected,
 
@@ -80,18 +85,21 @@ namespace Vircadia
         Error,
 
         /// <summary>
-        /// Native API reported connection status that this implementation does not recognize.
+        /// Native API reported connection status that this
+        /// implementation does not recognize.
         /// </summary>
         Unknown
     }
 
     /// <summary>
-    /// Initializes the client and provides an API for domain server connection.
+    /// Initializes the client and provides an API for domain server
+    /// connection.
     /// </summary>
     public class DomainServer
     {
 
         private int _context;
+        private MessagesClient messages;
 
         static void CreateUnmanaged(ref IntPtr param, string value)
         {
@@ -110,15 +118,25 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// Initializes the client and provides an API for domain server connection.
+        /// Initializes the client and provides an API for domain server
+        /// connection.
         /// </summary>
         /// <param name="ports"> Optional fixed ports to use. </param>
-        /// <param name="platformInfo"> Optional platform infomration. TODO: clarify the format. </param>
-        /// <param name="userAgent"> User agent string to use when connecting to Metaverse server (default: platform specific). </param>
-        /// <param name="appName"> Client application name, used for settings and log files (default: VircadiaClient). </param>
-        /// <param name="appOrganization"> Client application organization name, used for settings and log file directory (default: Vircadia). </param>
-        /// <param name="appDomain"> Client application domain name. (default: vircadia.com). TODO: figure out what this is for. </param>
-        /// <param name="appVersion"> Client application version. (default: native API version). </param>
+        /// <param name="platformInfo"> Optional platform infomration.
+        /// TODO: clarify the format. </param>
+        /// <param name="userAgent"> User agent string to use when
+        /// connecting to Metaverse server (default: platform specific).
+        /// </param>
+        /// <param name="appName"> Client application name, used for
+        /// settings and log files (default: VircadiaClient). </param>
+        /// <param name="appOrganization"> Client application
+        /// organization name, used for settings and log file directory
+        /// (default: Vircadia). </param>
+        /// <param name="appDomain"> Client application domain name.
+        /// (default: vircadia.com). TODO: figure out what this is for.
+        /// </param>
+        /// <param name="appVersion"> Client application version.
+        /// (default: native API version). </param>
         public DomainServer
         (
             Ports? ports = null,
@@ -130,7 +148,7 @@ namespace Vircadia
             string appVersion = null
         )
         {
-            var parameters = VircadiaNative.Client.vircadia_context_defaults();
+            var parameters = VircadiaNative.Context.vircadia_context_defaults();
             if (ports != null)
             {
                 if (ports.Value.listenPort != null)
@@ -147,10 +165,15 @@ namespace Vircadia
             CreateUnmanaged(ref parameters.platform_info, platformInfo);
             CreateUnmanaged(ref parameters.user_agent, userAgent);
 
-            this._context = VircadiaNative.Client.vircadia_create_context(parameters);
+            this._context = VircadiaNative.Context.vircadia_create_context(parameters);
 
             DestroyUnmanaged(parameters.platform_info, platformInfo);
             DestroyUnmanaged(parameters.user_agent, userAgent);
+
+            if (this._context >= 0)
+            {
+                messages = new MessagesClient(this);
+            }
         }
 
         ~DomainServer()
@@ -160,7 +183,7 @@ namespace Vircadia
                 return;
             }
 
-            if (VircadiaNative.Client.vircadia_destroy_context(this._context) < 0)
+            if (VircadiaNative.Context.vircadia_destroy_context(this._context) < 0)
             {
                 // TODO: report error somehow
             }
@@ -169,12 +192,16 @@ namespace Vircadia
         /// <summary>
         /// Connect or jump to specified location.
         /// </summary>
-        /// <param name="location">The address to go to: a "hifi://" address, an IP address (e.g., "127.0.0.1" or "localhost"), a file:/// address, a domain name, a named path on a domain (starts with "/"), a position or position and orientation, or a user (starts with "@").</param>
+        /// <param name="location">The address to go to: a "hifi://"
+        /// address, an IP address (e.g., "127.0.0.1" or "localhost"), a
+        /// file:/// address, a domain name, a named path on a domain
+        /// (starts with "/"), a position or position and orientation,
+        /// or a user (starts with "@").</param>
         public void Connect(string location)
         {
             IntPtr locationPtr = IntPtr.Zero;
             CreateUnmanaged(ref locationPtr, location);
-            VircadiaNative.Client.vircadia_connect(this._context, locationPtr);
+            VircadiaNative.NodeList.vircadia_connect(this._context, locationPtr);
             DestroyUnmanaged(locationPtr, location);
         }
 
@@ -190,7 +217,7 @@ namespace Vircadia
                     return DomainServerStatus.Error;
                 }
 
-                int nativeStatus = VircadiaNative.Client.vircadia_connection_status(this._context);
+                int nativeStatus = VircadiaNative.NodeList.vircadia_connection_status(this._context);
                 if (nativeStatus < 0)
                 {
                     return DomainServerStatus.Error;
@@ -215,12 +242,12 @@ namespace Vircadia
         {
             get
             {
-                if(VircadiaNative.Client.vircadia_update_nodes(this._context) < 0)
+                if(VircadiaNative.NodeList.vircadia_update_nodes(this._context) < 0)
                 {
                     return null;
                 }
 
-                int count = VircadiaNative.Client.vircadia_node_count(this._context);
+                int count = VircadiaNative.NodeList.vircadia_node_count(this._context);
 
                 if (count < 0)
                 {
@@ -232,7 +259,7 @@ namespace Vircadia
                 byte[] uuidBytes = new byte[16];
                 for (int i = 0; i < count ; ++i)
                 {
-                    IntPtr nativeUUID = VircadiaNative.Client.vircadia_node_uuid(this._context, i);
+                    IntPtr nativeUUID = VircadiaNative.NodeList.vircadia_node_uuid(this._context, i);
                     if (nativeUUID == IntPtr.Zero)
                     {
                         return null;
@@ -245,6 +272,10 @@ namespace Vircadia
 
                 return values;
             }
+        }
+
+        internal int ContextId {
+            get { return _context; }
         }
 
     }
