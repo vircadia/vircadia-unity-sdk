@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02c931a2692ea65dfbe451306c62a2c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  location: localhost
+  applicationInfo:
+    domain: 
 --- !u!4 &109466086
 Transform:
   m_ObjectHideFlags: 0

@@ -41,11 +41,21 @@ public class ApplicationInfo
     }
 }
 
+[System.Serializable]
+public struct MessageData
+{
+    public string displayName;
+    public string message;
+    public string type;
+    public string channel;
+}
+
 public class TestScript : MonoBehaviour
 {
     private Vircadia.DomainServer _domainServer;
     private bool _connected = false;
     private int _nodesSeen = 0;
+    private bool _testMessageSent = false;
 
     public string location = "localhost";
     public ApplicationInfo applicationInfo;
@@ -54,32 +64,34 @@ public class TestScript : MonoBehaviour
     {
         Debug.Log("Vircadia SDK native API version: " + Vircadia.Info.NativeVersion().full);
 
-        this._domainServer = new Vircadia.DomainServer(
-            appName: this.applicationInfo.name,
-            appOrganization: this.applicationInfo.organization,
-            appDomain: this.applicationInfo.domain,
-            appVersion: this.applicationInfo.version);
+        _domainServer = new Vircadia.DomainServer(
+            appName: applicationInfo.name,
+            appOrganization: applicationInfo.organization,
+            appDomain: applicationInfo.domain,
+            appVersion: applicationInfo.version);
 
-        if (!string.IsNullOrEmpty(this.location))
+        if (!string.IsNullOrEmpty(location))
         {
-            this._domainServer.Connect(this.location);
+            _domainServer.Connect(location);
+            _domainServer.Messages.Enable(Vircadia.MessageType.Text);
+            _domainServer.Messages.Subscribe("Chat");
         }
     }
 
     void FixedUpdate()
     {
-        if (!this._connected)
+        if (!_connected)
         {
             Debug.Log("[vircadia-unity-example] Connecting");
-            if (this._domainServer.Status == Vircadia.DomainServerStatus.Connected)
+            if (_domainServer.Status == Vircadia.DomainServerStatus.Connected)
             {
-                Debug.Log("[vircadia-unity-example] Successfully connected to " + this.location);
-                this._connected = true;
+                Debug.Log("[vircadia-unity-example] Successfully connected to " + location);
+                _connected = true;
             }
         }
         else
         {
-            var nodes = this._domainServer.Nodes;
+            var nodes = _domainServer.Nodes;
             if (nodes.Length != _nodesSeen)
             {
                 Debug.Log("[vircadia-unity-example] Updated node list:");
@@ -89,6 +101,32 @@ public class TestScript : MonoBehaviour
                 }
                 _nodesSeen = nodes.Length;
             }
+
+
+            if (!_testMessageSent)
+            {
+                _domainServer.Messages.SendTextMessage("Chat", JsonUtility.ToJson(new MessageData{
+                    displayName = "Unity SDK Example",
+                    message = "This is Vircadia Unity SDK example speaking.",
+                    channel = "Domain",
+                    type = "TransmitChatMessage"
+                }));
+                _testMessageSent = true;
+            }
+
+            _domainServer.Messages.Update();
+
+            foreach (var message in _domainServer.Messages.TextMessages)
+            {
+                var data = JsonUtility.FromJson<MessageData>(message.Text);
+                Debug.Log("[vircadia-unity-example] Received a chat message: \n" +
+                    "    Sender UUID: " + message.Sender.ToString() + "\n" +
+                    "    Display Name: " + data.displayName + "\n" +
+                    "    Channel: " + data.channel + "\n" +
+                    "    Type: " + data.type + "\n" +
+                    "    Text: " + data.message + "\n");
+            }
+
         }
     }
 
