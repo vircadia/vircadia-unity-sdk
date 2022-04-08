@@ -69,9 +69,9 @@ namespace Vircadia
                 year = nativeData.year,
                 major = nativeData.major,
                 minor = nativeData.minor,
-                commit = Marshal.PtrToStringUTF8(nativeData.commit),
-                number = Marshal.PtrToStringUTF8(nativeData.number),
-                full = Marshal.PtrToStringUTF8(nativeData.full)
+                commit = Marshal.PtrToStringAnsi(nativeData.commit),
+                number = Marshal.PtrToStringAnsi(nativeData.number),
+                full = Marshal.PtrToStringAnsi(nativeData.full)
             };
         }
 

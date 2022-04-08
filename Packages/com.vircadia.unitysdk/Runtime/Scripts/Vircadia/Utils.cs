@@ -20,7 +20,7 @@ namespace Vircadia
         {
             if (value != null)
             {
-                param = Marshal.StringToCoTaskMemUTF8(value);
+                param = Marshal.StringToCoTaskMemAnsi(value);
             }
         }
 

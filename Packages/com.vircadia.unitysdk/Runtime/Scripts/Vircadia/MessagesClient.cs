@@ -67,7 +67,7 @@ namespace Vircadia
 
         internal override void SetNativeMessage(IntPtr text, int size)
         {
-            Text = Marshal.PtrToStringUTF8(text);
+            Text = Marshal.PtrToStringAnsi(text);
         }
     }
 
@@ -293,7 +293,7 @@ namespace Vircadia
             {
                 IntPtr message = VircadiaNative.Messages.vircadia_get_message(_context, nativeType, i);
                 int size = VircadiaNative.Messages.vircadia_get_message_size(_context, nativeType, i);
-                string channel = Marshal.PtrToStringUTF8(
+                string channel = Marshal.PtrToStringAnsi(
                     VircadiaNative.Messages.vircadia_get_message_channel(_context, nativeType, i));
                 Guid? sender = Utils.getUUID(
                     VircadiaNative.Messages.vircadia_get_message_sender(_context, nativeType, i));
