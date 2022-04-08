@@ -73,5 +73,7 @@ public class MessagesClient
             Assert.IsTrue(messageReceived);
         }
 
+        domainServer.Destroy();
+
     }
 }

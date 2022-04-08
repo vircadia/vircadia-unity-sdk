@@ -8,18 +8,14 @@ build:
 	$(UNITY3D) -batchmode -nographics -quit -buildLinux64Player "$(BUILDDIR)/app" -logfile -
 
 run:
-	$(BUILDDIR)/app -screen-fullscreen 0 -screen-height 600 -screen-width 800 -logfile -
+	cd $(BUILDDIR); ./app -screen-fullscreen 0 -screen-height 600 -screen-width 800 -logfile -
 
-debug:
-	$(UNITY3D) -runTests -testFilter "Info;DomainServer" -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
-	$(UNITY3D) -runTests -testFilter MessagesClient -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
+debug-all:
+	$(UNITY3D) -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
 
 test:
 	@echo Running tests...
-	-@$(UNITY3D) -runTests -testFilter "Info;DomainServer" -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile - 2> /dev/null | grep VIRCADIA_SDK_TEST_LOG
-	@xmlstarlet sel -t -m '//message[1]' -v . -n < $(TEST_RESULT) || true
-	@xmlstarlet sel -t -m '//stack-trace[1]' -v . -n < $(TEST_RESULT) || true
-	-@$(UNITY3D) -runTests -testFilter "Info;MessagesClient" -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile - 2> /dev/null | grep VIRCADIA_SDK_TEST_LOG
+	-@$(UNITY3D) -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile - 2> /dev/null | grep VIRCADIA_SDK_TEST_LOG
 	@xmlstarlet sel -t -m '//message[1]' -v . -n < $(TEST_RESULT) || true
 	@xmlstarlet sel -t -m '//stack-trace[1]' -v . -n < $(TEST_RESULT) || true
 	@echo Complete.

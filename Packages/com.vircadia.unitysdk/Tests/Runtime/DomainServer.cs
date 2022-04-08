@@ -51,5 +51,7 @@ public class DomainServer
             yield return new WaitForSeconds(1);
         }
 
+        domainServer.Destroy();
+
     }
 }

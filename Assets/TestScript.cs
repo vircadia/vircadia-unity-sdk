@@ -130,4 +130,9 @@ public class TestScript : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        _domainServer.Destroy();
+    }
+
 }
