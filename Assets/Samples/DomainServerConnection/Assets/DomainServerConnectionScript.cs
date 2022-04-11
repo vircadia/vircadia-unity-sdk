@@ -1,6 +1,6 @@
 //
-//  Common.cs
-//  Scripts/Vircadia/Native
+//  DomainServerConnectionScript.cs
+//  Samples/DomainServerConnection
 //
 //  Created by Nshan G. on 03 Mar 2022.
 //  Copyright 2022 Vircadia contributors.
@@ -50,7 +50,7 @@ public struct MessageData
     public string channel;
 }
 
-public class TestScript : MonoBehaviour
+public class DomainServerConnectionScript : MonoBehaviour
 {
     private Vircadia.DomainServer _domainServer;
     private bool _connected = false;

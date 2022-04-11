@@ -1,5 +1,5 @@
 TEST_RESULT = unity-test-result.xml
-PACKAGE = com.vircadia.unitysdk.tar.gz
+PACKAGE = com.vircadia.unitysdk.tgz
 BUILDDIR = ./build
 
 UNITY3D = $(UNITY3D_PATH)/Editor/Unity
@@ -21,7 +21,9 @@ test:
 	@echo Complete.
 
 package: test
-	tar --xform s:'./':: -czvf $(PACKAGE) -C ./Packages/com.vircadia.unitysdk ./
+	rm -r Packages/com.vircadia.unitysdk/Samples~
+	cp Assets/Samples Packages/com.vircadia.unitysdk/Samples~
+	tar --transform="s/Packages\/com.vircadia.unitysdk/package/" -czvf ${PACKAGE} Packages/com.vircadia.unitysdk
 
 docs:
 	doxygen ./docs/Doxyfile
