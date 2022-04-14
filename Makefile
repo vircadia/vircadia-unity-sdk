@@ -10,7 +10,7 @@ build:
 run:
 	cd $(BUILDDIR); ./app -screen-fullscreen 0 -screen-height 600 -screen-width 800 -logfile -
 
-debug-all:
+debug:
 	$(UNITY3D) -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
 
 test:
@@ -21,8 +21,8 @@ test:
 	@echo Complete.
 
 package: test
-	rm -r Packages/com.vircadia.unitysdk/Samples~
-	cp Assets/Samples Packages/com.vircadia.unitysdk/Samples~
+	-rm -r Packages/com.vircadia.unitysdk/Samples~
+	cp Assets/Samples Packages/com.vircadia.unitysdk/Samples~ -r
 	tar --transform="s/Packages\/com.vircadia.unitysdk/package/" -czvf ${PACKAGE} Packages/com.vircadia.unitysdk
 
 docs:
