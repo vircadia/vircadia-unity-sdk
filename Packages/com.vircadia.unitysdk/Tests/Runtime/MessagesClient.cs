@@ -32,11 +32,20 @@ public class MessagesClient
 
         bool messageSent = false;
         bool messageReceived = false;
+        bool messageMixerActive = false;
         for (int i = 0; i < 10; ++i)
         {
             var status = domainServer.Status;
             if (status == Vircadia.DomainServerStatus.Connected)
             {
+                foreach (var node in domainServer.Nodes)
+                {
+                    if (node.type == Vircadia.NodeType.MessagesMixer)
+                    {
+                        messageMixerActive = node.active;
+                    }
+                }
+
                 domainServer.Messages.Enable(Vircadia.MessageType.Text);
                 domainServer.Messages.Subscribe(testChannel);
 
@@ -49,14 +58,18 @@ public class MessagesClient
                     if (message.Channel == testChannel && message.Text == testMessage)
                     {
                         messageReceived = true;
-                        break;
                     }
                 }
 
-                if (!messageSent)
+                if (!messageSent && messageMixerActive)
                 {
                     domainServer.Messages.SendTextMessage(testChannel, testMessage);
                     messageSent = true;
+                }
+
+                if (messageReceived)
+                {
+                    break;
                 }
 
             }

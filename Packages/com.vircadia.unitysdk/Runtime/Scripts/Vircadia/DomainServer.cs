@@ -16,6 +16,26 @@ namespace Vircadia
 {
 
     /// <summary>
+    /// Represents the type of a node.
+    /// </summary>
+    public enum NodeType : byte
+    {
+        DomainServer = (byte)'D',
+        EntityServer = (byte)'o',
+        Agent = (byte)'I',
+        AudioMixer = (byte)'M',
+        AvatarMixer = (byte)'W',
+        AssetServer = (byte)'A',
+        MessagesMixer = (byte)'m',
+        EntityScriptServer = (byte)'S',
+        UpstreamAudioMixer = (byte)'B',
+        UpstreamAvatarMixer = (byte)'C',
+        DownstreamAudioMixer = (byte)'a',
+        DownstreamAvatarMixer = (byte)'w',
+        Unassigned = 1
+    }
+
+    /// <summary>
     /// Optional fixed ports data.
     /// </summary>
     [System.Serializable]
@@ -40,7 +60,7 @@ namespace Vircadia
         /// <summary>
         /// Type of the node.
         /// </summary>
-        public byte type;
+        public NodeType type;
 
         /// <summary>
         /// Indicated weather the node is active, or not.
@@ -243,11 +263,17 @@ namespace Vircadia
                 for (int i = 0; i < count ; ++i)
                 {
                     var uuid = Utils.getUUID(VircadiaNative.NodeList.vircadia_node_uuid(this._context, i));
-                    if (uuid == null)
+                    int active = VircadiaNative.NodeList.vircadia_node_active(this._context, i);
+                    int type = VircadiaNative.NodeList.vircadia_node_type(this._context, i);
+
+                    if (uuid == null || active < 0 || type < 0)
                     {
                         return null;
                     }
+
                     values[i].uuid = uuid.Value;
+                    values[i].active = active == 1;
+                    values[i].type = (NodeType)type;
 
                     // TODO fill other node fields
                 }

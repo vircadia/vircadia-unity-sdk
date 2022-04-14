@@ -56,6 +56,7 @@ public class DomainServerConnectionScript : MonoBehaviour
     private bool _connected = false;
     private int _nodesSeen = 0;
     private bool _testMessageSent = false;
+    private bool _messagesMixerActive = false;
 
     public string location = "localhost";
     public ApplicationInfo applicationInfo;
@@ -98,12 +99,26 @@ public class DomainServerConnectionScript : MonoBehaviour
                 foreach (var node in nodes)
                 {
                     Debug.Log("[vircadia-unity-example] UUID: " + node.uuid.ToString());
+                    Debug.Log("[vircadia-unity-example] Tyoe: " + node.type.ToString());
+                    Debug.Log("[vircadia-unity-example] Active: " + node.active.ToString());
+                    Debug.Log("[vircadia-unity-example]");
                 }
                 _nodesSeen = nodes.Length;
             }
 
+            if (!_messagesMixerActive)
+            {
+                foreach (var node in nodes)
+                {
+                    if (node.type == Vircadia.NodeType.MessagesMixer)
+                    {
+                        _messagesMixerActive = node.active;
+                    }
+                }
+            }
 
-            if (!_testMessageSent)
+
+            if (!_testMessageSent && _messagesMixerActive)
             {
                 _domainServer.Messages.SendTextMessage("Chat", JsonUtility.ToJson(new MessageData{
                     displayName = "Unity SDK Example",

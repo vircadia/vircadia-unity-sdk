@@ -31,5 +31,11 @@ namespace VircadiaNative
 
         [DllImport(DLLConstants.Import)]
         public static extern IntPtr vircadia_node_uuid(int context, int index);
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_node_active(int context, int index);
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_node_type(int context, int index);
     }
 }
