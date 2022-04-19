@@ -4,7 +4,7 @@ This is a native native plugin for Unity 3D engine to support development of cli
 
 ### Getting Started
 
-The SDK package can be imported using the "Add package from tarball..." option in Unity Package Manager. The package includes additional samples that can be imported for the package manager window. The samples by default expect a server running on localhost, which can be installed following the instructions [here](https://docs.vircadia.com/explore/get-started/install.html).
+The SDK package can be imported using the "Add package from tarball..." option in [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui.html). The package includes additional samples that can be imported for the package manager window. The samples by default expect a server running on localhost, which can be installed following the instructions [here](https://docs.vircadia.com/explore/get-started/install.html).
 
 
 All components of the SDK are available under `Vircadia` namespace. The main entry point class is the `DomainServer`, which initialized all necessary state, allows connecting to domain servers and provides other components of the SDK as properties.
