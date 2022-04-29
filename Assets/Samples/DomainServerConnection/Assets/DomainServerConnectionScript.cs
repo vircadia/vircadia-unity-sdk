@@ -99,7 +99,7 @@ public class DomainServerConnectionScript : MonoBehaviour
                 foreach (var node in nodes)
                 {
                     Debug.Log("[vircadia-unity-example] UUID: " + node.uuid.ToString());
-                    Debug.Log("[vircadia-unity-example] Tyoe: " + node.type.ToString());
+                    Debug.Log("[vircadia-unity-example] Type: " + node.type.ToString());
                     Debug.Log("[vircadia-unity-example] Active: " + node.active.ToString());
                     Debug.Log("[vircadia-unity-example]");
                 }
