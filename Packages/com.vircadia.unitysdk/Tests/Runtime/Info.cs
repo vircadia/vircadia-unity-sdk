@@ -1,6 +1,6 @@
 //
 //  Info.cs
-//  UnityTests
+//  Tests/Runtime
 //
 //  Created by Nshan G. on 18 Feb 2022.
 //  Copyright 2022 Vircadia contributors.
@@ -15,7 +15,7 @@ using NUnit.Framework;
 public class Info
 {
     [Test]
-    public void BasicSimplePasses()
+    public void VersionPasses()
     {
         var version = Vircadia.Info.NativeVersion();
         Log.WriteLine("Native Client API version is " + version.full);

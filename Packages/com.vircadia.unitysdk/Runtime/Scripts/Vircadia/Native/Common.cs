@@ -1,6 +1,6 @@
 //
 //  Common.cs
-//  Scripts/Vircadia/Native
+//  Runtime/Scripts/Vircadia/Native
 //
 //  Created by Nshan G. on 18 Feb 2022.
 //  Copyright 2022 Vircadia contributors.

@@ -1,7 +1,14 @@
 TEST_RESULT = unity-test-result.xml
-PACKAGE = com.vircadia.unitysdk.tar.gz
+PACKAGE = com.vircadia.unitysdk.tgz
+BUILDDIR = ./build
 
 UNITY3D = $(UNITY3D_PATH)/Editor/Unity
+
+build:
+	$(UNITY3D) -batchmode -nographics -quit -buildLinux64Player "$(BUILDDIR)/app" -logfile -
+
+run:
+	cd $(BUILDDIR); ./app -screen-fullscreen 0 -screen-height 600 -screen-width 800 -logfile -
 
 debug:
 	$(UNITY3D) -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
@@ -14,7 +21,9 @@ test:
 	@echo Complete.
 
 package: test
-	tar --xform s:'./':: -czvf $(PACKAGE) -C ./Packages/com.vircadia.unitysdk ./
+	-rm -r Packages/com.vircadia.unitysdk/Samples~
+	cp Assets/Samples Packages/com.vircadia.unitysdk/Samples~ -r
+	tar --transform="s/Packages\/com.vircadia.unitysdk/package/" -czvf ${PACKAGE} Packages/com.vircadia.unitysdk
 
 docs:
 	doxygen ./docs/Doxyfile
@@ -25,5 +34,8 @@ clean-tests:
 clean-package:
 	-rm $(PACKAGE)
 
+clean-build:
+	-rm -rf $(BUILDDIR)
 
-.PHONY: test clean-tests
+
+.PHONY: build run debug test package docs clean-tests clean-package clean-build

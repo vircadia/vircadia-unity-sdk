@@ -50,6 +50,7 @@ ExportedObj/
 
 # Unity3D generated file on crash reports
 sysinfo.txt
+*.blob
 
 # Builds
 *.apk
@@ -79,3 +80,9 @@ unity-test-result.xml
 # Documetation
 /docs/html
 /docs/latex
+
+# Generated Package Samples
+Packages/com.vircadia.unitysdk/Samples~
+
+# Generated Package Archive
+com.vircadia.unitysdk.tgz
