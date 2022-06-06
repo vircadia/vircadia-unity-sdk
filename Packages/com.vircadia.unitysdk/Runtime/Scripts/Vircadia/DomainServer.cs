@@ -172,6 +172,7 @@ namespace Vircadia
             Utils.DestroyUnmanaged(parameters.user_agent, userAgent);
 
             Messages = this._context >= 0 ? new MessagesClient(this) : null;
+            Avatar = this._context >= 0 ? new AvatarManager(this) : null;
         }
 
         public void Destroy()
@@ -283,10 +284,25 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// Accessors for the messaging functionality of the client.
+        /// This client's unique identifier.
+        /// </summary>
+        public Guid? sessionUUID
+        {
+            get
+            {
+                return Utils.getUUID(VircadiaNative.NodeList.vircadia_client_get_session_uuid(_context));
+            }
+        }
+
+        /// <summary>
+        /// Accessor for the messaging functionality of the client.
         /// </summary>
         public MessagesClient Messages { get; private set; }
 
+        /// <summary>
+        /// Accessor for the avatars functionality of the client.
+        /// </summary>
+        public AvatarManager Avatar { get; private set; }
 
         internal int ContextId {
             get { return _context; }

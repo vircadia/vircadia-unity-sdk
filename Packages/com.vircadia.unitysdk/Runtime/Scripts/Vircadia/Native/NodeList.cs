@@ -37,5 +37,9 @@ namespace VircadiaNative
 
         [DllImport(DLLConstants.Import)]
         public static extern int vircadia_node_type(int context, int index);
+
+        [DllImport(DLLConstants.Import)]
+        public static extern IntPtr vircadia_client_get_session_uuid(int context_id);
+
     }
 }

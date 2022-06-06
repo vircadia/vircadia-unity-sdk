@@ -39,5 +39,35 @@ namespace VircadiaNative
         [DllImport(DLLConstants.Import)]
         public static extern int vircadia_error_message_type_disabled();
 
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_packet_write();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_argument_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatars_disabled();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_attachment_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_joint_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_bone_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_grab_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_entity_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_avatar_view_invalid();
+
     }
 }

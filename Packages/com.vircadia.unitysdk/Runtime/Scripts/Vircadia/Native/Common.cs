@@ -11,12 +11,15 @@
 
 namespace VircadiaNative
 {
-    public static class DLLConstants
-    {
+    public static class DLLConstants {
       #if UNITY_IOS || UNITY_TVOS
       public const string Import = "__Internal";
       #else
       public const string Import = "vircadia-client";
       #endif
+    }
+
+    public static class DataConstants {
+        public const int RFC4122ByteSize = 16;
     }
 }

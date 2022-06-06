@@ -39,10 +39,11 @@ namespace Vircadia
                 return null;
             }
 
-            byte[] uuidBytes = new byte[16];
+            byte[] uuidBytes = new byte[VircadiaNative.DataConstants.RFC4122ByteSize];
             Marshal.Copy(nativeUUID, uuidBytes, 0, uuidBytes.Length);
             return new Guid(uuidBytes);
         }
+
 
     }
 }
