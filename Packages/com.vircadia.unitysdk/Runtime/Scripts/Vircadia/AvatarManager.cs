@@ -12,6 +12,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Vircadia
@@ -23,44 +24,100 @@ namespace Vircadia
         public Quaternion? rotation;
     }
 
+    public enum AvatarDisconnectReason
+    {
+        Unknown,
+        Normal,
+        Ignored,
+        TheyEnteredBubble,
+        YouEnteredBubble
+    };
+
     /// <summary>
     /// Represents avatar data that can be sent or received.
     /// </summary>
     public struct AvatarData {
         public Guid id;
         public string displayName;
+        public bool lookAtSnappingEnabled;
         public string skeletonModelUrl;
         public Vector3 globalPosition;
         public Quaternion orientation;
         public float scale;
         public Bounds bounds;
-        // no scale
-        public Joint[] joints;
+        public Joint[] pose;
     }
+
+    /// <summary>
+    /// Event handler type for handling new avatar connection.
+    /// </summary>
+    /// <param name="avatar">The newly connected.</param>
+    public delegate void AvatarConnecedHandler(Avatar avatar);
+
+    /// <summary>
+    /// Event handler type for handling avatar disconnection.
+    /// </summary>
+    /// <param name="avatar">The disconnected avatar.</param>
+    /// <param name="reason">The disconnection reason.</param>
+    public delegate void AvatarDisconnectedHandler(Avatar avatar, AvatarDisconnectReason reason);
+
+    /// <summary>
+    /// Event handler type for handling avatar updates.
+    /// </summary>
+    /// <param name="avatar">The updated avatar.</param>
+    public delegate void AvatarUpdatedHandler(Avatar avatar);
+
 
     /// <summary>
     /// A handle for receiving avatar data from another clients.
     /// </summary>
     public class Avatar {
-        // TODO: Disconnected/Updated events
 
-        public AvatarData? GetData() {
+        /// <summary>
+        /// Fires when this avatar is disconnected.
+        /// </summary>
+        public event AvatarDisconnectedHandler Disconneced = delegate {};
+
+        /// <summary>
+        /// Fires whenever this avatar is updated.
+        /// </summary>
+        public event AvatarUpdatedHandler Updated = delegate {};
+
+        public AvatarData data;
+
+        internal void EmitDisconnect(AvatarDisconnectReason reason)
+        {
+            Disconneced(this, reason);
+        }
+
+        internal void EmitUpdate()
+        {
+            Updated(this);
+        }
+
+        internal bool UpdateData(int index) {
+
             Guid? id = Utils.getUUID(
-                VircadiaNative.Avatars.vircadia_get_avatar_uuid(_context, _index));
+                VircadiaNative.Avatars.vircadia_get_avatar_uuid(_context, index));
+
             string displayName = Marshal.PtrToStringAnsi(
-                VircadiaNative.Avatars.vircadia_get_avatar_display_name(_context, _index));
+                VircadiaNative.Avatars.vircadia_get_avatar_display_name(_context, index));
+            int lookAtSnappingEnabled = VircadiaNative.Avatars.vircadia_get_avatar_look_at_snapping(_context, index);
             string skeletonModelUrl = Marshal.PtrToStringAnsi(
-                VircadiaNative.Avatars.vircadia_get_avatar_skeleton_model_url(_context, _index));
+                VircadiaNative.Avatars.vircadia_get_avatar_skeleton_model_url(_context, index));
+
             VircadiaNative.vector? globalPosition = Marshal.PtrToStructure<VircadiaNative.vector>(
-                VircadiaNative.Avatars.vircadia_get_avatar_global_position(_context, _index));
+                VircadiaNative.Avatars.vircadia_get_avatar_global_position(_context, index));
             VircadiaNative.quaternion? orientation = Marshal.PtrToStructure<VircadiaNative.quaternion>(
-                VircadiaNative.Avatars.vircadia_get_avatar_orientation(_context, _index));
-            IntPtr scalePtr = VircadiaNative.Avatars.vircadia_get_avatar_scale(_context, _index);
-            int jointCount = VircadiaNative.Avatars.vircadia_get_avatar_joint_count(_context, _index);
+                VircadiaNative.Avatars.vircadia_get_avatar_orientation(_context, index));
+            IntPtr scalePtr = VircadiaNative.Avatars.vircadia_get_avatar_scale(_context, index);
+
+            int jointCount = VircadiaNative.Avatars.vircadia_get_avatar_joint_count(_context, index);
+
             if (id == null || displayName == null || skeletonModelUrl == null || globalPosition == null || orientation == null ||
                 scalePtr == IntPtr.Zero || jointCount < 0)
             {
-                return null;
+                return false;
             }
             else
             {
@@ -71,9 +128,9 @@ namespace Vircadia
                 for (int i = 0; i < joints.Length; ++i)
                 {
                     VircadiaNative.vantage joint = Marshal.PtrToStructure<VircadiaNative.vantage>(
-                        VircadiaNative.Avatars.vircadia_get_avatar_joint(_context, _index, i));
+                        VircadiaNative.Avatars.vircadia_get_avatar_joint(_context, index, i));
                     VircadiaNative.joint_flags flags = Marshal.PtrToStructure<VircadiaNative.joint_flags>(
-                        VircadiaNative.Avatars.vircadia_get_avatar_joint_flags(_context, _index, i));
+                        VircadiaNative.Avatars.vircadia_get_avatar_joint_flags(_context, index, i));
 
                     if (flags.translation_is_default == 0)
                     {
@@ -95,35 +152,55 @@ namespace Vircadia
 
                 }
 
-                AvatarData data = new AvatarData();
                 data.id = id.Value;
                 data.displayName = displayName;
                 data.skeletonModelUrl = skeletonModelUrl;
                 data.globalPosition = new Vector3(globalPosition.Value.x, globalPosition.Value.y, globalPosition.Value.z);
                 data.orientation = new Quaternion(orientation.Value.x, orientation.Value.y, orientation.Value.z, orientation.Value.w);
                 data.scale = scale[0];
-                data.joints = joints;
-                return data;
+                data.pose = joints;
             }
+
+            return VircadiaNative.Avatars.vircadia_avatar_changed(_context, index) == 1;
         }
 
-        internal Avatar(int context, int index)
+        internal Avatar(int context)
         {
             _context = context;
-            _index = index;
         }
 
-        internal int _index;
         private int _context;
     }
 
     /// <summary>
-    /// Provides APIs for sending and receiving avatar data.
+    /// An interface for sending and receiving avatar data.
     /// </summary>
     public class AvatarManager
     {
 
-        // TODO: AvatarConnected/Disconnected/Updated events
+        /// <summary>
+        /// Fires whenever a new avatar is connected. Avatar handling must be
+        /// enabled with <see cref="Vircadia.AvatarManager.Enable"> Enable
+        /// </see> method and <see cref="Vircadia.AvatarManager.Update"> Update
+        /// </see> method needs to be called for these event to fire.
+        /// </summary>
+        public event AvatarConnecedHandler AvatarConneced = delegate {};
+
+        /// <summary>
+        /// Fires whenever an avatar is disconnected. Avatar handling must be
+        /// enabled with <see cref="Vircadia.AvatarManager.Enable"> Enable
+        /// </see> method and <see cref="Vircadia.AvatarManager.Update"> Update
+        /// </see> method needs to be called for these event to fire.
+        /// </summary>
+        public event AvatarDisconnectedHandler AvatarDisconneced = delegate {};
+
+        /// <summary>
+        /// Fires whenever an avatar is updated. Avatar handling must be
+        /// enabled with <see cref="Vircadia.AvatarManager.Enable"> Enable
+        /// </see> method and <see cref="Vircadia.AvatarManager.Update"> Update
+        /// </see> method needs to be called for these event to fire.
+        /// </summary>
+        public event AvatarUpdatedHandler AvatarUpdated = delegate {};
 
         /// <summary>
         /// Enables handling of avatars. The incoming and outgoing data is
@@ -141,7 +218,7 @@ namespace Vircadia
         /// updated whenever <see cref="Vircadia.AvatarManager.Update"> Update
         /// </see> method is called.
         /// </summary>
-        public Avatar[] Others
+        public List<Avatar> Others
         {
             get; private set;
         }
@@ -155,36 +232,45 @@ namespace Vircadia
         public void Update()
         {
             VircadiaNative.Avatars.vircadia_update_avatars(_context);
-            Others = GetAvatars();
+            UpdateAvatars();
         }
 
         /// <summary>
-        /// Set our client's avatar data to be sent to the server. The data
+        /// Set this client's avatar data to be sent to the server. The data
         /// will not actually be sent unless the <see
-        /// cref="Vircadia.AvatarManager.Update"> Update </see> method is called.
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> method is
+        /// called.
         /// </summary>
-        /// <param name="data">The avatar data to send. </param>
+        /// <param name="data">The avatar data to send.</param>
         public void Send(AvatarData data)
         {
             IntPtr name = IntPtr.Zero;
             Utils.CreateUnmanaged(ref name, data.displayName);
+            VircadiaNative.Avatars.vircadia_set_my_avatar_display_name(_context, name);
+            Utils.DestroyUnmanaged(name, data.displayName);
+
             IntPtr url = IntPtr.Zero;
             Utils.CreateUnmanaged(ref url, data.skeletonModelUrl);
-
-            VircadiaNative.Avatars.vircadia_set_my_avatar_display_name(_context, name);
             VircadiaNative.Avatars.vircadia_set_my_avatar_skeleton_model_url(_context, url);
+            Utils.DestroyUnmanaged(url, data.skeletonModelUrl);
+
+            VircadiaNative.Avatars.vircadia_set_my_avatar_look_at_snapping(_context,
+                (byte) (data.lookAtSnappingEnabled ? 1 : 0));
+
             VircadiaNative.Avatars.vircadia_set_my_avatar_global_position(_context, new VircadiaNative.vector{
                 x = data.globalPosition.x, y = data.globalPosition.y, z = data.globalPosition.z});
+
             VircadiaNative.Avatars.vircadia_set_my_avatar_orientation(_context, new VircadiaNative.quaternion{
                 x = data.orientation.x, y = data.orientation.y, z = data.orientation.z, w = data.orientation.w});
+
             VircadiaNative.Avatars.vircadia_set_my_avatar_scale(_context, data.scale);
 
-            VircadiaNative.Avatars.vircadia_set_my_avatar_joint_count(_context, data.joints.Length);
-            VircadiaNative.Avatars.vircadia_set_my_avatar_joint_flags_count(_context, data.joints.Length);
-            for (int i = 0; i < data.joints.Length; ++i)
+            VircadiaNative.Avatars.vircadia_set_my_avatar_joint_count(_context, data.pose.Length);
+            VircadiaNative.Avatars.vircadia_set_my_avatar_joint_flags_count(_context, data.pose.Length);
+            for (int i = 0; i < data.pose.Length; ++i)
             {
-                var position = data.joints[i].position ?? new Vector3();
-                var rotation = data.joints[i].rotation ?? new Quaternion();
+                var position = data.pose[i].position ?? new Vector3();
+                var rotation = data.pose[i].rotation ?? new Quaternion();
                 VircadiaNative.Avatars.vircadia_set_my_avatar_joint(_context, i, new VircadiaNative.vantage{
                     position = new VircadiaNative.vector{
                         x = position.x, y = position.y, z = position.z},
@@ -192,13 +278,11 @@ namespace Vircadia
                         x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w}
                 });
                 VircadiaNative.Avatars.vircadia_set_my_avatar_joint_flags(_context, i, new VircadiaNative.joint_flags{
-                    translation_is_default = (byte) (data.joints[i].position == null ? 1 : 0),
-                    rotation_is_default = (byte) (data.joints[i].rotation == null ? 1 : 0)
+                    translation_is_default = (byte) (data.pose[i].position == null ? 1 : 0),
+                    rotation_is_default = (byte) (data.pose[i].rotation == null ? 1 : 0)
                 });
             }
 
-            Utils.DestroyUnmanaged(name, data.displayName);
-            Utils.DestroyUnmanaged(url, data.skeletonModelUrl);
         }
 
         private int _context;
@@ -206,23 +290,63 @@ namespace Vircadia
         internal AvatarManager(DomainServer domainServer)
         {
             _context = domainServer.ContextId;
+            Others = new List<Avatar>();
         }
 
-        private Avatar[] GetAvatars()
+        private void UpdateAvatars()
         {
+            int disconnecionCount = VircadiaNative.Avatars.vircadia_get_avatar_disconnection_count(_context);
+            if (disconnecionCount < 0)
+            {
+                return;
+            }
+
+            for (int disconnection = 0; disconnection < disconnecionCount; ++disconnection)
+            {
+                Guid? id = Utils.getUUID(VircadiaNative.Avatars.vircadia_get_avatar_disconnection_uuid(_context, disconnection));
+                if (id == null)
+                {
+                    return;
+                }
+
+                int removedIndex = Others.FindIndex(avatar => avatar.data.id == id);
+                if (removedIndex != -1)
+                {
+                    int reason = VircadiaNative.Avatars.vircadia_get_avatar_disconnection_reason(_context, disconnection);
+                    if (reason < 0)
+                    {
+                        continue;
+                    }
+                    var removed = Others[removedIndex];
+                    AvatarDisconneced(removed, (AvatarDisconnectReason) reason);
+                    removed.EmitDisconnect((AvatarDisconnectReason) reason);
+                    Others.RemoveAt(removedIndex);
+                }
+            }
+
             int count = VircadiaNative.Avatars.vircadia_get_avatar_count(_context);
             if (count < 0)
             {
-                return null;
+                return;
             }
 
-            Avatar[] avatars = new Avatar[count];
-            for (int i = 0; i < count; ++i)
+            for (int i = Others.Count; i < count; ++i)
             {
-                avatars[i] = new Avatar(_context, i);
+                var avatar = new Avatar(_context);
+                AvatarConneced(avatar);
+                Others.Add(avatar);
             }
 
-            return avatars;
+            for (int i = 0; i < Others.Count; ++i)
+            {
+                var avatar = Others[i];
+                if (avatar.UpdateData(i))
+                {
+                    AvatarUpdated(avatar);
+                    avatar.EmitUpdate();
+                }
+            }
+
         }
 
     }

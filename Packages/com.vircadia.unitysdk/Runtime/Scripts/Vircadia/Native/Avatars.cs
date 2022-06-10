@@ -341,5 +341,17 @@ namespace VircadiaNative
         [DllImport(DLLConstants.Import)]
         public static extern avatar_grab_result vircadia_get_avatar_grab(int context_id, int avatar_index, int grab_index);
 
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_get_avatar_disconnection_count(int context_id);
+
+        [DllImport(DLLConstants.Import)]
+        public static extern IntPtr vircadia_get_avatar_disconnection_uuid(int context_id, int disconnection_index);
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_get_avatar_disconnection_reason(int context_id, int disconnection_index);
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_avatar_changed(int context_id, int disconnection_index);
+
     }
 }
