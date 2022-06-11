@@ -17,7 +17,7 @@ namespace Vircadia
 {
     internal static class Utils
     {
-        public static void CreateUnmanaged(ref IntPtr param, string value)
+        internal static void CreateUnmanaged(ref IntPtr param, string value)
         {
             if (value != null)
             {
@@ -25,7 +25,7 @@ namespace Vircadia
             }
         }
 
-        public static void DestroyUnmanaged(IntPtr param, string value)
+        internal static void DestroyUnmanaged(IntPtr param, string value)
         {
             if (value != null)
             {
@@ -33,7 +33,7 @@ namespace Vircadia
             }
         }
 
-        public static Guid? getUUID(IntPtr nativeUUID)
+        internal static Guid? getUUID(IntPtr nativeUUID)
         {
             if (nativeUUID == IntPtr.Zero)
             {
@@ -45,7 +45,7 @@ namespace Vircadia
             return new Guid(uuidBytes);
         }
 
-        public static T? PtrToStructureOrNull<T>(IntPtr ptr)
+        internal static T? PtrToStructureOrNull<T>(IntPtr ptr)
             where T : struct
         {
             if (ptr == IntPtr.Zero)
@@ -56,7 +56,7 @@ namespace Vircadia
             return Marshal.PtrToStructure<T>(ptr);
         }
 
-        public static float? PtrToFloat(IntPtr ptr)
+        internal static float? PtrToFloat(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
             {

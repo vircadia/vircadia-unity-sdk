@@ -18,40 +18,109 @@ using UnityEngine;
 namespace Vircadia
 {
 
+    /// <summary>
+    /// Represents a single joint pose.
+    /// </summary>
     public struct Joint
     {
+
+        /// <summary>
+        /// The position of the joint. Null indicates that the joint is in the
+        /// default position.
+        /// </summary>
         public Vector3? position;
+
+        /// <summary>
+        /// The rotation of the joint. Null indicates that the joint has the
+        /// default rotation.
+        /// </summary>
         public Quaternion? rotation;
     }
 
+    /// <summary>
+    /// A simple representation of linear transformation.
+    /// </summary>
     public struct Transform
     {
+        /// <summary>
+        /// The translation component.
+        /// </summary>
         public Vector3 translation;
+
+        /// <summary>
+        /// The rotation component.
+        /// </summary>
         public Quaternion rotation;
+
+        /// <summary>
+        /// The scale component.
+        /// </summary>
         public float scale;
     }
 
+    /// <summary>
+    /// Represents an avatar attachment.
+    /// </summary>
     public struct AvatarAttachment
     {
+        /// <summary>
+        /// The URL to the attachment's model.
+        /// </summary>
         public string modelUrl;
+
+        /// <summary>
+        /// The name of the avatar skeleton joint the attachment is attached
+        /// to.
+        /// </summary>
         public string jointName;
+
+        /// <summary>
+        /// The linear transformation op the attachment. Null indicates that he
+        /// joint is animated and has not fixed in position.
+        /// </summary>
         public Transform? transform;
     }
 
+    /// <summary>
+    /// Possible avatar skeleton bone types.
+    /// </summary>
     public enum BoneType : byte
     {
+        // TODO: documentation
         SkeletonRoot,
         SkeletonChild,
         NonSkeletonRoot,
         NonSkeletonChild
     }
 
+    /// <summary>
+    /// Represents a single avatar skeleton bone.
+    /// </summary>
     public struct Bone
     {
+        /// <summary>
+        /// The type of the bone.
+        /// </summary>
         public BoneType type;
+
+        /// <summary>
+        /// The default pose of the bone.
+        /// </summary>
         public Transform defaultTransform;
+
+        /// <summary>
+        /// The index of the bone.
+        /// </summary>
         public int index;
+
+        /// <summary>
+        /// The index of the bone's parent bone.
+        /// </summary>
         public int parentIndex;
+
+        /// <summary>
+        /// The name of the bone.
+        /// </summary>
         public string name;
     }
 
@@ -63,26 +132,101 @@ namespace Vircadia
         IndexFingerPointing = 1 << 2
     }
 
+    /// <summary>
+    /// Represents additional avatar flags.
+    /// </summary>
     public struct AvatarAdditionalFlags
     {
+        /// <summary>
+        /// Indicates that the avatar's left hand is pointing.
+        /// This controls where the laser emanates from. If the index
+        /// finger is pointing the laser emanates from the tip of that
+        /// finger, otherwise it emanates from the palm.
+        /// </summary>
         public bool leftHandPointing;
+
+        /// <summary>
+        /// Indicates that the avatar's right hand is pointing.
+        /// This controls where the laser emanates from. If the index
+        /// finger is pointing the laser emanates from the tip of that
+        /// finger, otherwise it emanates from the palm.
+        /// </summary>
         public bool rightHandPointing;
+
+        /// <summary>
+        /// Indicates that the avatar's index finger on the either hand is pointing.
+        /// This controls where the laser emanates from. If the index
+        /// finger is pointing the laser emanates from the tip of that
+        /// finger, otherwise it emanates from the palm.
+        /// </summary>
         public bool indexFingerPointing;
+
+        /// <summary>
+        /// Indicates that the avatar face movement is controlled by
+        /// code/script.
+        /// </summary>
         public bool headHasScriptedBlendshapes;
+
+        // TODO: document or mark private
         public bool hasProceduralEyeMovement;
+
+        /// <summary>
+        /// Indicates that the avatar's mouth blend shapes animate
+        /// automatically based on detected microphone input.
+        ///
+        /// Set this to true to fully control the mouth facial blend shapes.
+        /// </summary>
         public bool hasAudioFaceMovement;
+
+        /// <summary>
+        /// Indicates that the facial blend shapes for avatar's eyes adjust
+        /// automatically as the eyes move.
+        ///
+        /// This can be set to true prevent the iris from being obscured by the
+        /// upper or lower lids, or to false to have full control of the eye
+        /// blend shapes.
+        /// </summary>
         public bool hasProceduralEyeFaceMovement;
+
+        /// <summary>
+        /// Indicates whether the avatar blinks automatically by animating
+        /// facial blend shapes.
+        ///
+        /// Set to false to to fully control the blink facial blend shapes.
+        /// </summary>
         public bool hasProceduralBlinkFaceMovement;
+
+        /// <summary>
+        /// Indicates that the avatar can collide with other avatars.
+        /// </summary>
         public bool collidesWithAvatars;
+
+        /// <summary>
+        /// Read only flag, indicates that the avatar is in "hero" zone.
+        /// </summary>
         public bool hasPriority;
     }
 
+    /// <summary>
+    /// Represents avatar parent information.
+    /// </summary>
     public struct AvatarParentInfo
     {
+        /// <summary>
+        /// The id of the parent.
+        /// </summary>
         public Guid id;
+
+        /// <summary>
+        /// The joint index of the parent that the avatars local position is
+        /// relative to.
+        /// </summary>
         public int jointIndex;
     }
 
+    /// <summary>
+    /// Represents position and rotation of the left and right hand controllers.
+    /// </summary>
     public struct AvatarHandControllers
     {
         public Vector3 leftPosition;
@@ -91,15 +235,27 @@ namespace Vircadia
         public Quaternion rightRotation;
     }
 
+    /// <summary>
+    /// Represents position and rotation of the left and right hand controllers.
+    /// </summary>
     public struct FaceTrackerInfo
     {
+        // TOOD: these 4 are unused in the native interface
         public float leftEyeBlink;
         public float rightEyeBlink;
         public float averageLoudness;
         public float browAudioLift;
+
+        /// <summary>
+        /// The blend shape coefficient array that define the avatar's facial
+        /// expression.
+        /// </summary>
         public float[] blendshapeCoefficients;
     }
 
+    /// <summary>
+    /// Represents avatar far grab joint positions and rotations.
+    /// </summary>
     public struct AvatarGrabJoints
     {
         public Vector3 leftPosition;
@@ -110,27 +266,81 @@ namespace Vircadia
         public Quaternion mouseRotation;
     };
 
+    /// <summary>
+    /// Represents grab action data.
+    /// </summary>
     public struct GrabData
     {
+        /// <summary>
+        /// The id of the grabbed object.
+        /// </summary>
         public Guid target;
+
+        /// <summary>
+        /// The index of the joint that the avatar is grabbing with.
+        /// </summary>
         public int jointIndex;
+
+        /// <summary>
+        /// The position of the grabbed object relative to the grabbing joint.
+        /// </summary>
         public Vector3 translation;
+
+        /// <summary>
+        /// The rotation of the grabbed object relative to the grabbing joint.
+        /// </summary>
         public Quaternion rotation;
     }
 
+    /// <summary>
+    /// Represents grab action instance.
+    /// </summary>
     public struct GrabAction
     {
+        /// <summary>
+        /// Represents id the grab action.
+        /// </summary>
         public Guid id;
+
+        /// <summary>
+        /// The grab action data.
+        /// </summary>
         public GrabData data;
     }
 
+    /// <summary>
+    /// Represents camera view for culling object data received from the
+    /// server.
+    /// </summary>
     public struct CameraView
     {
+
+        /// <summary>
+        /// The position of the camera.
+        /// </summary>
         public Vector3 position;
+
+        /// <summary>
+        /// An additional culling radius centered around the camera.
+        /// </summary>
         public float radius;
+
+        /// <summary>
+        /// The far clip plane's distance from the camera.
+        /// </summary>
         public float farClip;
+
+        /// <summary>
+        /// The four corners of the camera's near clip plane.
+        /// </summary>
         public Vector3[] nearCorners;
 
+        /// <summary>
+        /// Constructs a camera view form Unity camera object.
+        /// </summary>
+        /// <param name="camera">The camera to construct the view from.</param>
+        /// <param name="radius">The additional culling radius of the view.</param>
+        /// <param name="eye">The camera eye to use.</param>
         public CameraView(Camera camera, float radius = 1, Camera.MonoOrStereoscopicEye eye = Camera.MonoOrStereoscopicEye.Mono)
         {
             position = camera.transform.position;
@@ -141,19 +351,19 @@ namespace Vircadia
         }
     }
 
-    public class AvatarUtils
+    internal class AvatarUtils
     {
-        public static Vector3 VectorFromNative(VircadiaNative.vector v)
+        internal static Vector3 VectorFromNative(VircadiaNative.vector v)
         {
             return new Vector3(v.x, v.y, v.z);
         }
 
-        public static Quaternion QuaternionFromNative(VircadiaNative.quaternion q)
+        internal static Quaternion QuaternionFromNative(VircadiaNative.quaternion q)
         {
             return new Quaternion(q.x, q.y, q.z, q.w);
         }
 
-        public static Transform TransformFromNative(VircadiaNative.transform t)
+        internal static Transform TransformFromNative(VircadiaNative.transform t)
         {
             return new Transform {
                 translation = VectorFromNative(t.vantage.position),
@@ -162,12 +372,12 @@ namespace Vircadia
             };
         }
 
-        public static Bounds BoundsFromNative(VircadiaNative.bounds b)
+        internal static Bounds BoundsFromNative(VircadiaNative.bounds b)
         {
             return new Bounds(VectorFromNative(b.offset), VectorFromNative(b.dimensions));
         }
 
-        public static AvatarAdditionalFlags AdditionalFlagsFromNative(VircadiaNative.avatar_additional_flags f)
+        internal static AvatarAdditionalFlags AdditionalFlagsFromNative(VircadiaNative.avatar_additional_flags f)
         {
             return new AvatarAdditionalFlags {
                 leftHandPointing = (f.hand_state & (byte) AvatarHandFlags.LeftPointing) != 0,
@@ -183,7 +393,7 @@ namespace Vircadia
             };
         }
 
-        public static AvatarHandControllers HandControllersFromNative(VircadiaNative.avatar_hand_controllers c)
+        internal static AvatarHandControllers HandControllersFromNative(VircadiaNative.avatar_hand_controllers c)
         {
             return new AvatarHandControllers {
                 leftPosition = VectorFromNative(c.left.position),
@@ -193,7 +403,7 @@ namespace Vircadia
             };
         }
 
-        public static FaceTrackerInfo FaceTrackerInfoFromNative(VircadiaNative.avatar_face_tracker_info f)
+        internal static FaceTrackerInfo FaceTrackerInfoFromNative(VircadiaNative.avatar_face_tracker_info f)
         {
             var blendshapeCoefficients = new float[f.blendshape_coefficients_size];
             Array.Copy(f.blendshape_coefficients, blendshapeCoefficients, blendshapeCoefficients.Length);
@@ -206,7 +416,7 @@ namespace Vircadia
             };
         }
 
-        public static AvatarGrabJoints GrabJointsFromNative(VircadiaNative.far_grab_joints j)
+        internal static AvatarGrabJoints GrabJointsFromNative(VircadiaNative.far_grab_joints j)
         {
             return new AvatarGrabJoints {
                 leftPosition = VectorFromNative(j.left.position),
@@ -218,21 +428,21 @@ namespace Vircadia
             };
         }
 
-        public static VircadiaNative.vector NativeVectorFrom(Vector3 v)
+        internal static VircadiaNative.vector NativeVectorFrom(Vector3 v)
         {
             return new VircadiaNative.vector {
                 x = v.x, y = v.y, z = v.z
             };
         }
 
-        public static VircadiaNative.quaternion NativeQuaternionFrom(Quaternion q)
+        internal static VircadiaNative.quaternion NativeQuaternionFrom(Quaternion q)
         {
             return new VircadiaNative.quaternion {
                 x = q.x, y = q.y, z = q.z, w = q.w
             };
         }
 
-        public static VircadiaNative.transform NativeTransformFrom(Transform t)
+        internal static VircadiaNative.transform NativeTransformFrom(Transform t)
         {
             return new VircadiaNative.transform {
                 vantage = new VircadiaNative.vantage {
@@ -243,7 +453,7 @@ namespace Vircadia
             };
         }
 
-        public static VircadiaNative.bounds NativeBoundsFrom(Bounds b)
+        internal static VircadiaNative.bounds NativeBoundsFrom(Bounds b)
         {
             return new VircadiaNative.bounds {
                 dimensions = NativeVectorFrom(b.size),
@@ -251,7 +461,7 @@ namespace Vircadia
             };
         }
 
-        public static VircadiaNative.avatar_additional_flags NativeAdditionalFlagsFrom(AvatarAdditionalFlags f)
+        internal static VircadiaNative.avatar_additional_flags NativeAdditionalFlagsFrom(AvatarAdditionalFlags f)
         {
             byte handState = 0;
             if (f.leftHandPointing)
@@ -282,7 +492,7 @@ namespace Vircadia
             };
         }
 
-        public static VircadiaNative.avatar_hand_controllers NativeHandControllersFrom(AvatarHandControllers c)
+        internal static VircadiaNative.avatar_hand_controllers NativeHandControllersFrom(AvatarHandControllers c)
         {
             return new VircadiaNative.avatar_hand_controllers {
                 left = new VircadiaNative.vantage {
@@ -296,7 +506,7 @@ namespace Vircadia
             };
         }
 
-        public static VircadiaNative.avatar_face_tracker_info NativeFaceTrackerInfoFrom(FaceTrackerInfo f)
+        internal static VircadiaNative.avatar_face_tracker_info NativeFaceTrackerInfoFrom(FaceTrackerInfo f)
         {
             var blendshapeCoefficients = new float[256];
             Array.Copy(f.blendshapeCoefficients, blendshapeCoefficients, f.blendshapeCoefficients.Length);
@@ -310,7 +520,7 @@ namespace Vircadia
             };
         }
 
-        public static VircadiaNative.far_grab_joints NativeGrabJointsFrom(AvatarGrabJoints j)
+        internal static VircadiaNative.far_grab_joints NativeGrabJointsFrom(AvatarGrabJoints j)
         {
             return new VircadiaNative.far_grab_joints {
                 left = new VircadiaNative.vantage {
@@ -330,39 +540,134 @@ namespace Vircadia
 
     }
 
+    /// <summary>
+    /// Possible disconnection reasons for other avatars.
+    /// </summary>
     public enum AvatarDisconnectReason
     {
+        // TOOD: documentation
         Unknown,
-        Normal,
+        Network,
         Ignored,
         TheyEnteredBubble,
         YouEnteredBubble
     };
 
     /// <summary>
-    /// Represents avatar data that can be sent or received.
+    /// Represents main avatar data that can be sent or received.
     /// </summary>
     public struct AvatarData {
+        /// <summary>
+        /// The identifier of the avatar.
+        /// </summary>
         public Guid id;
+
+        /// <summary>
+        /// The avatars name displayed to the application users.
+        /// </summary>
         public string displayName;
+
+        /// <summary>
+        /// Avatar's "look at snapping" flag.
+        ///
+        /// If enabled make the avatar's eyes snap to look at another avatar's
+        /// eyes when the other avatar is in the line of sight and also has
+        /// this flag set.
+        /// </summary>
         public bool lookAtSnappingEnabled;
+
+        /// <summary>
+        /// Indicates that the avatar's model failed identity verification.
+        /// </summary>
         public bool verificationFailed;
+
+        /// <summary>
+        /// The list of avatar's attachments.
+        /// </summary>
         public AvatarAttachment[] attachments;
+
+        /// <summary>
+        /// The URL to skeleton and model of the avatar.
+        /// </summary>
         public string skeletonModelUrl;
+
+        /// <summary>
+        /// The global position of the avatar.
+        /// </summary>
         public Vector3 globalPosition;
+
+        /// <summary>
+        /// The absolute orientation of the avatar.
+        /// </summary>
         public Quaternion orientation;
+
+        /// <summary>
+        /// The scale of the avatar.
+        /// </summary>
         public float scale;
+
+        /// <summary>
+        /// The bounds of the avatar.
+        /// </summary>
         public Bounds bounds;
+
+        /// <summary>
+        /// The position the avatar is looking at (with no eye tracking usually
+        /// the mouse cursor position)
+        /// </summary>
         public Vector3 lookAtPosition;
+
+        /// <summary>
+        /// The instantaneous loudness of the avatar's audio.
+        /// </summary>
         public float audioLoudness;
+
+        /// <summary>
+        /// The scale, rotation and translation transform from the user's real
+        /// world to the avatar's size, orientation and position in the virtual
+        /// world.
+        /// </summary>
         public Transform sensorToWorld;
+
+        /// <summary>
+        /// Avatar's additional flags.
+        /// </summary>
         public AvatarAdditionalFlags additionalFlags;
+
+        /// <summary>
+        /// Avatar's parent information.
+        /// </summary>
         public AvatarParentInfo parent;
+
+        /// <summary>
+        /// Avatar's position relative to it's <see
+        /// cref="Vircadia.AvatarData.parent"> parent </see>.
+        /// </summary>
         public Vector3 localPosition;
+
+        /// <summary>
+        /// The position and rotation of left and right hand controllers.
+        /// </summary>
         public AvatarHandControllers handControllers;
+
+        /// <summary>
+        /// The facial animation data of the avatar.
+        /// </summary>
         public FaceTrackerInfo faceTrackerInfo;
+
+        /// <summary>
+        /// The far grab joints of the avatar.
+        /// </summary>
         public AvatarGrabJoints grabJoints;
+
+        /// <summary>
+        /// The current pose of the avatar.
+        /// </summary>
         public Joint[] pose;
+
+        /// <summary>
+        /// Avatar's skeleton data.
+        /// </summary>
         public Bone[] skeleton;
     }
 
@@ -402,8 +707,15 @@ namespace Vircadia
         /// </summary>
         public event AvatarUpdatedHandler Updated = delegate {};
 
+        /// <summary>
+        /// The main data of the avatar. Read only.
+        /// </summary>
         public AvatarData data;
-        public GrabAction[] grabActions;
+
+        /// <summary>
+        /// The current grab actions of the avatar.
+        /// </summary>
+        public GrabAction[] GrabActions { get; internal set; }
 
         internal void EmitDisconnect(AvatarDisconnectReason reason)
         {
@@ -575,7 +887,7 @@ namespace Vircadia
                 data.grabJoints = AvatarUtils.GrabJointsFromNative(grabJoints.Value);
                 data.pose = joints;
                 data.skeleton = bones;
-                grabActions = grabs;
+                GrabActions = grabs;
             }
 
             return VircadiaNative.Avatars.vircadia_avatar_changed(_context, index) == 1;
@@ -661,10 +973,9 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// Set this client's avatar data to be sent to the server. The data
-        /// will not actually be sent unless the <see
-        /// cref="Vircadia.AvatarManager.Update"> Update </see> method is
-        /// called.
+        /// Set this client's avatar data send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call.
         /// </summary>
         /// <param name="data">The avatar data to send.</param>
         public void Send(AvatarData data)
@@ -690,6 +1001,13 @@ namespace Vircadia
             SendSkeleton(data.skeleton);
         }
 
+        /// <summary>
+        /// Set this client's avatar's name to send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call. This is not necessarily exactly what other's
+        /// will see, the server may sanitize and/or de-duplicate the name,
+        /// </summary>
+        /// <param name="displayName">The avatar displayName to send.</param>
         public void SendDisplayName(string displayName)
         {
             IntPtr name = IntPtr.Zero;
@@ -698,6 +1016,12 @@ namespace Vircadia
             Utils.DestroyUnmanaged(name, displayName);
         }
 
+        /// <summary>
+        /// Set this client's avatar's model URL to send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call.
+        /// </summary>
+        /// <param name="displayName">The avatar skeleton and model URL to send.</param>
         public void SendSkeletonModelUrl(string skeletonModelUrl)
         {
             IntPtr url = IntPtr.Zero;
@@ -706,88 +1030,188 @@ namespace Vircadia
             Utils.DestroyUnmanaged(url, skeletonModelUrl);
         }
 
+        /// <summary>
+        /// Set this client's avatar's "look at snapping" flag to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. See <see
+        /// cref="Vircadia.AvatarData.lookAtSnappingEnabled">
+        /// AvatarData.lookAtSnappingEnabled </see>.
+        /// </summary>
+        /// <param name="lookAtSnappingEnabled">The flag value to send.</param>
         public void SendLookAtSnapping(bool lookAtSnappingEnabled)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_look_at_snapping(_context,
                 (byte) (lookAtSnappingEnabled ? 1 : 0));
         }
 
+        /// <summary>
+        /// Set this client's avatar's global position to send to the server.
+        /// Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call.
+        /// </summary>
+        /// <param name="globalPosition">The global position vector to send.</param>
         public void SendGlobalPosition(Vector3 globalPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_global_position(
                 _context, AvatarUtils.NativeVectorFrom(globalPosition));
         }
 
+        /// <summary>
+        /// Set this client's avatar's orientation to send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call.
+        /// </summary>
+        /// <param name="orientation">The orientation quaternion to send.</param>
         public void SendOrientation(Quaternion orientation)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_orientation(
                 _context, AvatarUtils.NativeQuaternionFrom(orientation));
         }
 
+        /// <summary>
+        /// Set this client's avatar's scale to send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call.
+        /// </summary>
+        /// <param name="scale">The scale value to send.</param>
         public void SendScale(float scale)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_scale(_context, scale);
         }
 
+        /// <summary>
+        /// Set this client's avatar's bounds to send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call.
+        /// </summary>
+        /// <param name="bounds">The bounds to send.</param>
         public void SendBounds(Bounds bounds)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_bounding_box(
                 _context, AvatarUtils.NativeBoundsFrom(bounds));
         }
 
+        /// <summary>
+        /// Set this client's avatar's bounds to send to the server. Sent
+        /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
+        /// Update </see> call.
+        /// </summary>
+        /// <param name="bounds">The bounds to send.</param>
         public void SendLookAtPosition(Vector3 lookAtPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_look_at(
                 _context, AvatarUtils.NativeVectorFrom(lookAtPosition));
         }
 
+        /// <summary>
+        /// Set this client's avatar's audio loudness value to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. See <see
+        /// cref="Vircadia.AvatarData.audioLoudness"> AvatarData.audioLoudness
+        /// </see>.
+        /// </summary>
+        /// <param name="audioLoudness">The audio loudness value to send.</param>
         public void SendAudioLoudness(float audioLoudness)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_audio_loudness(_context, audioLoudness);
         }
 
+        /// <summary>
+        /// Set this client's avatar's sensor to world coordinate
+        /// transformation to send to the server. Sent asynchronously after an
+        /// <see cref="Vircadia.AvatarManager.Update"> Update </see> call. See
+        /// <see cref="Vircadia.AvatarData.sensorToWorld">
+        /// AvatarData.sensorToWorld </see>.
+        /// </summary>
+        /// <param name="transform">The transform to send.</param>
         public void SendSensorToWorldTreansform(Transform transform)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_sensor_to_world(
                 _context, AvatarUtils.NativeTransformFrom(transform));
         }
 
+        /// <summary>
+        /// Set this client's avatar's additional flag values to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call.
+        /// </summary>
+        /// <param name="flags">The flags to send.</param>
         public void SendAdditionalFlags(AvatarAdditionalFlags flags)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_additional_flags(
                 _context, AvatarUtils.NativeAdditionalFlagsFrom(flags));
         }
 
+        /// <summary>
+        /// Set this client's avatar's parent information to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call.
+        /// </summary>
+        /// <param name="parent">The parent information to send.</param>
         public void SendParentInfo(AvatarParentInfo parent)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_parent_info(_context, new VircadiaNative.avatar_parent_info {
                 uuid = parent.id.ToByteArray(), joint_index = (ushort) parent.jointIndex});
         }
 
+        /// <summary>
+        /// Set this client's avatar's parent relative position to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. See <see
+        /// cref="Vircadia.AvatarData.localPosition"> AvatarData.localPosition
+        /// </see>.
+        /// </summary>
+        /// <param name="localPosition">The relative position vector to send.</param>
         public void SendLocalPosition(Vector3 localPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_local_position(
                 _context, AvatarUtils.NativeVectorFrom(localPosition));
         }
 
+        /// <summary>
+        /// Set the position and rotation of this client's avatar's hand
+        /// controllers to send to the server.  Sent asynchronously after an
+        /// <see cref="Vircadia.AvatarManager.Update"> Update </see> call.
+        /// </see>.
+        /// </summary>
+        /// <param name="handControllers">The position and rotation data for
+        /// left and right controllers.</param>
         public void SendHandControllers(AvatarHandControllers handControllers)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_hand_controllers(
                 _context, AvatarUtils.NativeHandControllersFrom(handControllers));
         }
 
+        /// <summary>
+        /// Set this client's avatar's facial animation data to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="faceTrackerInfo">The facial animation data to send.</param>
         public void SendFaceTrackerInfo(FaceTrackerInfo faceTrackerInfo)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_face_tracker_info(
                 _context, AvatarUtils.NativeFaceTrackerInfoFrom(faceTrackerInfo));
         }
 
+        /// <summary>
+        /// Set this client's avatar's facial animation data to send to the
+        /// server. Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="faceTrackerInfo">The facial animation data to send.</param>
         public void SendGrabJoints(AvatarGrabJoints grabJoints)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_grab_joints(
                 _context, AvatarUtils.NativeGrabJointsFrom(grabJoints));
         }
 
+        /// <summary>
+        /// Set this client's avatar's current pose data to send to the server.
+        /// Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="pose">The array of joint positions and rotations to send.</param>
         public void SendPose(Joint[] pose)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_joint_count(_context, pose.Length);
@@ -809,6 +1233,12 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// Set this client's avatar's current pose data to send to the server.
+        /// Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="pose">The joint position and rotation array to send.</param>
         public void SendAttachments(AvatarAttachment[] attachments)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_attachment_count(_context, attachments.Length);
@@ -835,6 +1265,12 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// Set this client's avatar's skeleton data to send to the server.
+        /// Sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="skeleton">The array of bone data to send.</param>
         public void SendSkeleton(Bone[] skeleton)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_bone_count(_context, skeleton.Length);
@@ -857,6 +1293,12 @@ namespace Vircadia
             }
         }
 
+        /// <summary>
+        /// Creates a new grab action for this client's avatar. The grab
+        /// action data is sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="data">The grab data of the action.</param>
         public void Grab(GrabData data)
         {
             VircadiaNative.Avatars.vircadia_my_avatar_grab(_context, new VircadiaNative.avatar_grab {
@@ -869,6 +1311,12 @@ namespace Vircadia
             });
         }
 
+        /// <summary>
+        /// Removes an existing grab action of this client's avatar. The grab
+        /// action data is sent asynchronously after an <see
+        /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
+        /// </summary>
+        /// <param name="grabActionId">The identifier of the action to remove.</param>
         public void ReleaseGrab(Guid grabActionId)
         {
             var uuid = grabActionId.ToByteArray();

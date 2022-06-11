@@ -176,6 +176,12 @@ namespace Vircadia
             Avatar = this._context >= 0 ? new AvatarManager(this) : null;
         }
 
+        /// <summary>
+        /// Cleans up all the resources allocated for this client. This is
+        /// called in the finalizer, but need to be called explictly in
+        /// situations where finalizers can't be relied upon (specifically the
+        /// Unity editor and unit tests).
+        /// </summary>
         public void Destroy()
         {
             if (this._context < 0)
@@ -287,6 +293,7 @@ namespace Vircadia
         /// <summary>
         /// This client's unique identifier.
         /// </summary>
+        // TOOD: this requires Nodes getter, since update call is there, that's confusing should probably make it explicit
         public Guid? sessionUUID
         {
             get
