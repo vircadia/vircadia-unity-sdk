@@ -16,35 +16,41 @@ using System.Runtime.InteropServices;
 namespace VircadiaNative
 {
 
-    public struct vector {
+    public struct vector
+    {
         public float x;
         public float y;
         public float z;
     };
 
-    public struct quaternion {
+    public struct quaternion
+    {
         public float x;
         public float y;
         public float z;
         public float w;
     };
 
-    public struct bounds {
+    public struct bounds
+    {
         public vector dimensions;
         public vector offset;
     };
 
-    public struct vantage {
+    public struct vantage
+    {
         public vector position;
         public quaternion rotation;
     };
 
-    public struct transform {
+    public struct transform
+    {
         public vantage vantage;
         public float scale;
     };
 
-    public struct avatar_additional_flags{
+    public struct avatar_additional_flags
+    {
         public byte hand_state;
         public byte key_state;
         public byte has_head_scripted_blendshapes;
@@ -56,18 +62,21 @@ namespace VircadiaNative
         public byte has_priority;
     };
 
-    public struct avatar_parent_info {
+    public struct avatar_parent_info
+    {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = DataConstants.RFC4122ByteSize)]
         public byte[] uuid;
-        ushort joint_index;
+        public ushort joint_index;
     };
 
-    public struct avatar_hand_controllers {
+    public struct avatar_hand_controllers
+    {
         public vantage left;
         public vantage right;
     };
 
-    public struct avatar_face_tracker_info {
+    public struct avatar_face_tracker_info
+    {
         public float left_eye_blink;
         public float right_eye_blink;
         public float average_loundness;
@@ -77,30 +86,35 @@ namespace VircadiaNative
         public float[] blendshape_coefficients;
     };
 
-    public struct far_grab_joints {
+    public struct far_grab_joints
+    {
         public vantage left;
         public vantage right;
         public vantage mouse;
     };
 
-    public struct joint_flags {
+    public struct joint_flags
+    {
         public byte translation_is_default;
         public byte rotation_is_default;
     };
 
-    public struct avatar_attachment {
+    public struct avatar_attachment
+    {
         public IntPtr model_url;
         public IntPtr joint_name;
         public transform transform;
         public byte is_soft;
     };
 
-    public struct avatar_attachment_result {
+    public struct avatar_attachment_result
+    {
         public avatar_attachment result;
         public int error;
     };
 
-    public struct avatar_bone {
+    public struct avatar_bone
+    {
         public byte type;
         public transform default_transform;
         public int index;
@@ -108,30 +122,46 @@ namespace VircadiaNative
         public IntPtr name;
     };
 
-    public struct avatar_bone_result {
+    public struct avatar_bone_result
+    {
         public avatar_bone result;
         public int error;
     };
 
-    public struct avatar_grab {
+    public struct avatar_grab
+    {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = DataConstants.RFC4122ByteSize)]
         public byte[] target_id;
         public int joint_index;
         public vantage offset;
     };
 
-    public struct avatar_grab_result {
+    public struct avatar_grab_result
+    {
         public IntPtr id;
         public avatar_grab result;
         public int error;
     };
 
-    public struct conical_view_frustum {
+    public struct conical_view_frustum
+    {
         public vector position;
         public vector direction;
         public float angle;
         public float radius;
         public float far_clip;
+    };
+
+    public struct view_frustum_corners
+    {
+        public vector position;
+        public float radius;
+        public float far_clip;
+
+        public vector near_top_left;
+        public vector near_top_right;
+        public vector near_bottom_left;
+        public vector near_bottom_right;
     };
 
     public static class Avatars
@@ -249,6 +279,9 @@ namespace VircadiaNative
         public static extern int vircadia_set_avatar_view(int context_id, int view_index, conical_view_frustum view_frustum);
 
         [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_set_avatar_view_corners(int context_id, int view_index, view_frustum_corners view_frustum);
+
+        [DllImport(DLLConstants.Import)]
         public static extern int vircadia_get_avatar_count(int context_id);
 
         [DllImport(DLLConstants.Import)]
@@ -306,7 +339,7 @@ namespace VircadiaNative
         public static extern IntPtr vircadia_get_avatar_sensor_to_world(int context_id, int avatar_index);
 
         [DllImport(DLLConstants.Import)]
-        public static extern IntPtr  vircadia_get_avatar_additional_flags(int context_id, int avatar_index);
+        public static extern IntPtr vircadia_get_avatar_additional_flags(int context_id, int avatar_index);
 
         [DllImport(DLLConstants.Import)]
         public static extern IntPtr vircadia_get_avatar_parent_info(int context_id, int avatar_index);

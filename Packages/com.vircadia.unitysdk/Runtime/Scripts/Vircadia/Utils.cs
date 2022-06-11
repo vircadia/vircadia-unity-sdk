@@ -45,6 +45,29 @@ namespace Vircadia
             return new Guid(uuidBytes);
         }
 
+        public static T? PtrToStructureOrNull<T>(IntPtr ptr)
+            where T : struct
+        {
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            return Marshal.PtrToStructure<T>(ptr);
+        }
+
+        public static float? PtrToFloat(IntPtr ptr)
+        {
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var result = new float[1];
+            Marshal.Copy(ptr, result, 0, 1);
+
+            return result[0];
+        }
 
     }
 }
