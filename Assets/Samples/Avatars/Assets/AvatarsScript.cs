@@ -32,7 +32,7 @@ public class AvatarsScript : MonoBehaviour
     private int _nodesSeen = 0;
     private bool _testMessageSent = false;
     private bool _messagesMixerActive = false;
-    private Guid? _echo_avatar;
+    private Guid? _echoAvatar;
 
     public string location = "localhost";
 
@@ -119,31 +119,31 @@ public class AvatarsScript : MonoBehaviour
                     "    Type: " + data.type + "\n" +
                     "    Text: " + data.message + "\n");
 
-                if (_echo_avatar != null)
+                if (_echoAvatar != null)
                 {
-                    if (message.Sender == _echo_avatar.Value && data.message == "freeze")
+                    if (message.Sender == _echoAvatar.Value && data.message == "freeze")
                     {
-                        _echo_avatar = null;
+                        _echoAvatar = null;
                     }
                 }
                 else if (data.message == "echo me")
                 {
-                    _echo_avatar = message.Sender;
+                    _echoAvatar = message.Sender;
                 }
             }
 
             _domainServer.Avatar.Update();
 
-            if (_echo_avatar != null)
+            if (_echoAvatar != null)
             {
                 bool found = false;
                 foreach (var avatar in _domainServer.Avatar.Others)
                 {
-                    if (_echo_avatar.Value == avatar.data.id)
+                    if (_echoAvatar.Value == avatar.data.id)
                     {
                         var data = avatar.data;
                         found = true;
-                        data.globalPosition.z += 2;
+                        data.globalPosition.z += 1 * data.scale;
                         data.displayName += " (echo)";
                         _domainServer.Avatar.Send(data);
                     }
@@ -151,7 +151,7 @@ public class AvatarsScript : MonoBehaviour
 
                 if (!found)
                 {
-                    _echo_avatar = null;
+                    _echoAvatar = null;
                 }
             }
 
