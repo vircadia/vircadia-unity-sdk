@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class AvatarsScript : MonoBehaviour
+public class AvatarEchoScript : MonoBehaviour
 {
     [System.Serializable]
     public struct MessageData
