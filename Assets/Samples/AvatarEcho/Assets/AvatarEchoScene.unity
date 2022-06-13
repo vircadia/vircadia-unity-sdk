@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9a86adb73475de7899a5fca3f3b5765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  location: 50.116.60.222
+  location: localhost
 --- !u!1 &778838313
 GameObject:
   m_ObjectHideFlags: 0
