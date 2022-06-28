@@ -1,6 +1,6 @@
 //
-//  DomainServerConnectionScript.cs
-//  Samples/DomainServerConnection
+//  AvatarsScript.cs
+//  Samples/Avatars
 //
 //  Created by Nshan G. on 03 Mar 2022.
 //  Copyright 2022 Vircadia contributors.
@@ -10,73 +10,50 @@
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
 //
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class ApplicationInfo
-{
 
-    private string _name;
-    public string name
+public class AvatarEchoScript : MonoBehaviour
+{
+    [System.Serializable]
+    public struct MessageData
     {
-        get { return _name ?? Application.productName; }
-        set { _name = value; }
+        public string displayName;
+        public string message;
+        public string type;
+        public string channel;
     }
 
-    private string _organization;
-    public string organization
-    {
-        get { return _organization ?? Application.companyName; }
-        set { _organization = value; }
-    }
-
-    public string domain;
-
-    private string _version;
-    public string version
-    {
-        get { return _version ?? Application.version; }
-        set { _version = value; }
-    }
-}
-
-[System.Serializable]
-public struct MessageData
-{
-    public string displayName;
-    public string message;
-    public string type;
-    public string channel;
-}
-
-public class DomainServerConnectionScript : MonoBehaviour
-{
     private Vircadia.DomainServer _domainServer;
     private bool _connected = false;
     private int _nodesSeen = 0;
     private bool _testMessageSent = false;
     private bool _messagesMixerActive = false;
+    private Guid? _echoAvatar;
 
     public string location = "localhost";
-    public ApplicationInfo applicationInfo;
 
     void Start()
     {
         Debug.Log("Vircadia SDK native API version: " + Vircadia.Info.NativeVersion().full);
 
         _domainServer = new Vircadia.DomainServer(
-            appName: applicationInfo.name,
-            appOrganization: applicationInfo.organization,
-            appDomain: applicationInfo.domain,
-            appVersion: applicationInfo.version);
+            appName: Application.productName,
+            appOrganization: Application.companyName,
+            appDomain: "",
+            appVersion: Application.version);
 
         if (!string.IsNullOrEmpty(location))
         {
             _domainServer.Connect(location);
+
             _domainServer.Messages.Enable(Vircadia.MessageType.Text);
             _domainServer.Messages.Subscribe("Chat");
+
+            _domainServer.Avatar.Enable();
         }
     }
 
@@ -141,6 +118,41 @@ public class DomainServerConnectionScript : MonoBehaviour
                     "    Channel: " + data.channel + "\n" +
                     "    Type: " + data.type + "\n" +
                     "    Text: " + data.message + "\n");
+
+                if (_echoAvatar != null)
+                {
+                    if (message.Sender == _echoAvatar.Value && data.message == "freeze")
+                    {
+                        _echoAvatar = null;
+                    }
+                }
+                else if (data.message == "echo me")
+                {
+                    _echoAvatar = message.Sender;
+                }
+            }
+
+            _domainServer.Avatar.Update();
+
+            if (_echoAvatar != null)
+            {
+                bool found = false;
+                foreach (var avatar in _domainServer.Avatar.Others)
+                {
+                    if (_echoAvatar.Value == avatar.data.id)
+                    {
+                        var data = avatar.data;
+                        found = true;
+                        data.globalPosition.z += 1 * data.scale;
+                        data.displayName += " (echo)";
+                        _domainServer.Avatar.Send(data);
+                    }
+                }
+
+                if (!found)
+                {
+                    _echoAvatar = null;
+                }
             }
 
         }

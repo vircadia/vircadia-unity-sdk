@@ -4,6 +4,7 @@
 //
 //  Created by Nshan G. on 21 Mar 2022.
 //  Copyright 2022 Vircadia contributors.
+//  Copyright 2022 DigiSomni LLC.
 //
 //  Distributed under the Apache License, Version 2.0.
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
@@ -172,8 +173,15 @@ namespace Vircadia
             Utils.DestroyUnmanaged(parameters.user_agent, userAgent);
 
             Messages = this._context >= 0 ? new MessagesClient(this) : null;
+            Avatar = this._context >= 0 ? new AvatarManager(this) : null;
         }
 
+        /// <summary>
+        /// Cleans up all the resources allocated for this client. This is
+        /// called in the finalizer, but need to be called explictly in
+        /// situations where finalizers can't be relied upon (specifically the
+        /// Unity editor and unit tests).
+        /// </summary>
         public void Destroy()
         {
             if (this._context < 0)
@@ -283,10 +291,26 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// Accessors for the messaging functionality of the client.
+        /// This client's unique identifier.
+        /// </summary>
+        // TOOD: this requires Nodes getter, since update call is there, that's confusing should probably make it explicit
+        public Guid? sessionUUID
+        {
+            get
+            {
+                return Utils.getUUID(VircadiaNative.NodeList.vircadia_client_get_session_uuid(_context));
+            }
+        }
+
+        /// <summary>
+        /// Accessor for the messaging functionality of the client.
         /// </summary>
         public MessagesClient Messages { get; private set; }
 
+        /// <summary>
+        /// Accessor for the avatars functionality of the client.
+        /// </summary>
+        public AvatarManager Avatar { get; private set; }
 
         internal int ContextId {
             get { return _context; }
