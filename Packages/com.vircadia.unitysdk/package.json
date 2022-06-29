@@ -6,7 +6,7 @@
   "samples": [
       {
           "displayName": "Domain Server Connection",
-          "description": "Simple example of connecting to the domain server, sending and receiving text messages.",
+          "description": "A simple example of connecting to the domain server, sending and receiving text messages.",
           "path": "Samples~/DomainServerConnection"
       },
       {

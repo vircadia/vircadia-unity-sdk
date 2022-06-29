@@ -2,6 +2,8 @@
 //  DomainServerConnectionScript.cs
 //  Samples/DomainServerConnection
 //
+//  A simple example of connecting to the domain server, sending and receiving text messages.
+//
 //  Created by Nshan G. on 03 Mar 2022.
 //  Copyright 2022 Vircadia contributors.
 //  Copyright 2022 DigiSomni LLC.
