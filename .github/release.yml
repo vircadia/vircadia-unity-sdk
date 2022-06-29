@@ -1,0 +1,14 @@
+changelog:
+  categories:
+    - title: SDK User Features
+      labels:
+        - enhancement
+    - title: SDK User Bugfixes
+      labels:
+        - bug
+    - title: SDK Developer Features
+      labels:
+        - dev-feature
+    - title: SDK Developer Bugfixes
+      labels:
+        - dev-bug
