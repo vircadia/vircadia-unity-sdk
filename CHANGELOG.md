@@ -1,3 +1,12 @@
+## Version 2022.0.2
+
+### Features
+* Avatar mixer interface.
+
+### Developer Features
+* Example project settings for Android.
+* Configuration for automatic GitHub release notes.
+
 ## Version 2022.0.1
 
 ### Features
