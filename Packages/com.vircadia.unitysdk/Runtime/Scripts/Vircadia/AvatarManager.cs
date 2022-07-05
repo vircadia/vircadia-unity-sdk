@@ -236,7 +236,7 @@ namespace Vircadia
     }
 
     /// <summary>
-    /// Represents position and rotation of the left and right hand controllers.
+    /// Represents avatar's facial expression.
     /// </summary>
     public struct FaceTrackerInfo
     {
