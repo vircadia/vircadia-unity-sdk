@@ -2,6 +2,8 @@
 //  AvatarsScript.cs
 //  Samples/Avatars
 //
+//  A simple bot that receives commands in chat to copy the user's avatar appearance and movements.
+//
 //  Created by Nshan G. on 03 Mar 2022.
 //  Copyright 2022 Vircadia contributors.
 //  Copyright 2022 DigiSomni LLC.
