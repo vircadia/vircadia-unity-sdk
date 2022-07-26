@@ -105,7 +105,6 @@ public class AudioCallScript : MonoBehaviour
             _domainServer.Audio.SetEcho(echo);
             _domainServer.Audio.SetInputMuted(muteInput);
             _domainServer.Audio.Update();
-
         }
     }
 
