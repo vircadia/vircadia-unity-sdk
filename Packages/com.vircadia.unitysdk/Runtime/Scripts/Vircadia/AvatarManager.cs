@@ -40,6 +40,7 @@ namespace Vircadia
     /// <summary>
     /// A simple representation of linear transformation.
     /// </summary>
+    [Serializable]
     public struct Transform
     {
         /// <summary>
