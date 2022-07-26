@@ -75,8 +75,7 @@ public class AudioCallScript : MonoBehaviour
         // microphone, which result in a repeat of the last part of recording
         // and hight latency after that (probably has to do with lenghtSec in
         // Microphone.Start). Might be possible to detect and mitigate by
-        // restarting the microphone and the audioSource, if we can detect this
-        // happening.
+        // restarting the microphone and the audioSource.
         audioSource.Play();
     }
 
