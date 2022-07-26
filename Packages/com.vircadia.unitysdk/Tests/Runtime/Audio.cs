@@ -44,7 +44,7 @@ public class Audio
         domainServer.Audio.Enable();
         domainServer.Audio.SetEcho(true);
 
-        domainServer.Audio.AudioInputReady += (Vircadia.AudioInputWriter writer) =>
+        domainServer.Audio.InputReady += (Vircadia.AudioInputWriter writer) =>
         {
             inputThread = new Thread(() =>
             {
@@ -63,7 +63,7 @@ public class Audio
             inputThread.Start();
         };
 
-        domainServer.Audio.AudioOutputReady += (Vircadia.AudioOutputReader reader) =>
+        domainServer.Audio.OutputReady += (Vircadia.AudioOutputReader reader) =>
         {
             outputThread = new Thread(() =>
             {

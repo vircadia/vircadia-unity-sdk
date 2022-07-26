@@ -15,15 +15,25 @@ using UnityEngine;
 namespace Vircadia
 {
 
+    /// <summary>
+    /// Audio input filter component. This will process audio data and it to
+    /// the mixer. Must be used as a last filter in the chain, as it'll will
+    /// zero out the data read, to prevent playback.
+    /// </summary>
+    [RequireComponent(typeof(AudioSource))]
     public class AudioInputFilter : MonoBehaviour
     {
-
+        /// <summary>
+        /// <see cref="Vircadia.AudioInputWriter"> AudioInputWriter </see>
+        /// object to use for sending audio data, provided by <see
+        /// cref="Vircadia.AudioClient.InputReady"> AudioClient.InputReady </see>
+        /// event.
+        /// </summary>
         public AudioInputWriter writer;
-        public int expectedChannelCount;
 
         void OnAudioFilterRead(float[] samples, int channelCount)
         {
-            if (expectedChannelCount == channelCount)
+            if (writer.channelCount == channelCount)
             {
                 writer.Write(samples);
             }
@@ -31,7 +41,7 @@ namespace Vircadia
             // format, so channelCount passed here has little to do
             // with microphone input and we have to do these
             // conversions to go back to what we expect.
-            else if (expectedChannelCount == 1 && channelCount > 1)
+            else if (writer.channelCount == 1 && channelCount > 1)
             {
                 for (int i = 0, o = 0; i < samples.Length; i += channelCount, ++o)
                 {
@@ -46,7 +56,7 @@ namespace Vircadia
 
                 writer.Write(samples, samples.Length / channelCount);
             }
-            else if (expectedChannelCount == 2 && channelCount == 1)
+            else if (writer.channelCount == 2 && channelCount == 1)
             {
                 var stereoSamples = new float[samples.Length * 2];
                 for (int i = 0 ; i < samples.Length; ++i)
@@ -68,7 +78,6 @@ namespace Vircadia
                 samples[i] = 0;
             }
         }
-
     }
 
 }

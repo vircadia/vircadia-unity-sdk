@@ -17,16 +17,26 @@ using UnityEngine;
 namespace Vircadia
 {
 
+    /// <summary>
+    /// Audio output filter component. This will overwrite the audio data with
+    /// data received from the mixer. Meant to be used as the first filter in
+    /// the chain, without an AudioClip.
+    /// </summary>
+    [RequireComponent(typeof(AudioSource))]
     public class AudioOutputFilter : MonoBehaviour
     {
-
+        /// <summary>
+        /// <see cref="Vircadia.AudioOutputReader"> AudioOutputReader </see>
+        /// object to use to receive audio data, provided by <see
+        /// cref="Vircadia.AudioClient.OutputReady"> AudioClient.OutputReady
+        /// </see> event.
+        /// </summary>
         public AudioOutputReader reader;
 
         void OnAudioFilterRead(float[] samples, int channels)
         {
             reader.Read(samples);
         }
-
     }
 
 }

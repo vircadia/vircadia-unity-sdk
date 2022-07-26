@@ -31,8 +31,8 @@ public class AudioCallScript : MonoBehaviour
             _domainServer.Connect(location);
 
             _domainServer.Audio.Enable();
-            _domainServer.Audio.AudioInputReady += StartInput;
-            _domainServer.Audio.AudioOutputReady += StartOutput;
+            _domainServer.Audio.InputReady += StartInput;
+            _domainServer.Audio.OutputReady += StartOutput;
 
             _domainServer.Audio.SetBounds(new Bounds(Vector3.one * 0.5f, Vector3.one));
             _domainServer.Audio.SetTransform(vantagePoint);
@@ -67,7 +67,6 @@ public class AudioCallScript : MonoBehaviour
         audioSource.clip = Microphone.Start(null, true, 1, AudioSettings.outputSampleRate);
         var inputFilter = audioInput.AddComponent<Vircadia.AudioInputFilter>();
         inputFilter.writer = writer;
-        inputFilter.expectedChannelCount = isStereoInput ? 2 : 1;
         audioSource.loop = true;
         while (!(Microphone.GetPosition(null) > 0)) { } // Weird, but without this the audio source gets ahead of the clip.
         // TODO: Try using a coroutine instead of a busy wait, may affect latency.
