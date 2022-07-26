@@ -23,7 +23,7 @@ using UnityEngine.TestTools;
 public class Avatars
 {
     [UnityTest]
-    public IEnumerator ConnectionPasses()
+    public IEnumerator SendReceiveDisplayName()
     {
 
         string testName = "Vircadia Unity SDK Avatar Name";

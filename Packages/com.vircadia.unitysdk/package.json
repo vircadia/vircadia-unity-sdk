@@ -13,6 +13,11 @@
           "displayName": "Avatar Echo Bot",
           "description": "A simple bot that receives commands in chat to copy the user's avatar appearance and movements.",
           "path": "Samples~/AvatarEcho"
+      },
+      {
+          "displayName": "Audio Call",
+          "description": "Connect to a domain as a spooky disembodied voice~ i.e. basic audio input and output.",
+          "path": "Samples~/AudioCall"
       }
   ]
 

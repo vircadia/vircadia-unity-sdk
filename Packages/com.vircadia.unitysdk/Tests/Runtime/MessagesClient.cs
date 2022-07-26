@@ -19,7 +19,7 @@ using UnityEngine.TestTools;
 public class MessagesClient
 {
     [UnityTest]
-    public IEnumerator ConnectionPasses()
+    public IEnumerator SendReceiveText()
     {
 
         string testChannel = "Chat";

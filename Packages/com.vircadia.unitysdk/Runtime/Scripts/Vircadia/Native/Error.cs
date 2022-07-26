@@ -70,5 +70,17 @@ namespace VircadiaNative
         [DllImport(DLLConstants.Import)]
         public static extern int vircadia_error_avatar_view_invalid();
 
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_audio_codec_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_audio_context_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_audio_format_invalid();
+
+        [DllImport(DLLConstants.Import)]
+        public static extern int vircadia_error_audio_disabled();
+
     }
 }

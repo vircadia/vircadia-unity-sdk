@@ -40,6 +40,7 @@ namespace Vircadia
     /// <summary>
     /// A simple representation of linear transformation.
     /// </summary>
+    [Serializable]
     public struct Transform
     {
         /// <summary>
@@ -353,30 +354,6 @@ namespace Vircadia
 
     internal class AvatarUtils
     {
-        internal static Vector3 VectorFromNative(VircadiaNative.vector v)
-        {
-            return new Vector3(v.x, v.y, v.z);
-        }
-
-        internal static Quaternion QuaternionFromNative(VircadiaNative.quaternion q)
-        {
-            return new Quaternion(q.x, q.y, q.z, q.w);
-        }
-
-        internal static Transform TransformFromNative(VircadiaNative.transform t)
-        {
-            return new Transform {
-                translation = VectorFromNative(t.vantage.position),
-                rotation = QuaternionFromNative(t.vantage.rotation),
-                scale = t.scale,
-            };
-        }
-
-        internal static Bounds BoundsFromNative(VircadiaNative.bounds b)
-        {
-            return new Bounds(VectorFromNative(b.offset), VectorFromNative(b.dimensions));
-        }
-
         internal static AvatarAdditionalFlags AdditionalFlagsFromNative(VircadiaNative.avatar_additional_flags f)
         {
             return new AvatarAdditionalFlags {
@@ -396,10 +373,10 @@ namespace Vircadia
         internal static AvatarHandControllers HandControllersFromNative(VircadiaNative.avatar_hand_controllers c)
         {
             return new AvatarHandControllers {
-                leftPosition = VectorFromNative(c.left.position),
-                rightPosition = VectorFromNative(c.right.position),
-                leftRotation = QuaternionFromNative(c.left.rotation),
-                rightRotation = QuaternionFromNative(c.right.rotation)
+                leftPosition = DataConversion.VectorFromNative(c.left.position),
+                rightPosition = DataConversion.VectorFromNative(c.right.position),
+                leftRotation = DataConversion.QuaternionFromNative(c.left.rotation),
+                rightRotation = DataConversion.QuaternionFromNative(c.right.rotation)
             };
         }
 
@@ -419,45 +396,12 @@ namespace Vircadia
         internal static AvatarGrabJoints GrabJointsFromNative(VircadiaNative.far_grab_joints j)
         {
             return new AvatarGrabJoints {
-                leftPosition = VectorFromNative(j.left.position),
-                rightPosition = VectorFromNative(j.right.position),
-                mousePosition = VectorFromNative(j.mouse.position),
-                leftRotation = QuaternionFromNative(j.left.rotation),
-                rightRotation = QuaternionFromNative(j.right.rotation),
-                mouseRotation = QuaternionFromNative(j.mouse.rotation),
-            };
-        }
-
-        internal static VircadiaNative.vector NativeVectorFrom(Vector3 v)
-        {
-            return new VircadiaNative.vector {
-                x = v.x, y = v.y, z = v.z
-            };
-        }
-
-        internal static VircadiaNative.quaternion NativeQuaternionFrom(Quaternion q)
-        {
-            return new VircadiaNative.quaternion {
-                x = q.x, y = q.y, z = q.z, w = q.w
-            };
-        }
-
-        internal static VircadiaNative.transform NativeTransformFrom(Transform t)
-        {
-            return new VircadiaNative.transform {
-                vantage = new VircadiaNative.vantage {
-                    position = NativeVectorFrom(t.translation),
-                    rotation = NativeQuaternionFrom(t.rotation),
-                },
-                scale = t.scale
-            };
-        }
-
-        internal static VircadiaNative.bounds NativeBoundsFrom(Bounds b)
-        {
-            return new VircadiaNative.bounds {
-                dimensions = NativeVectorFrom(b.size),
-                offset = NativeVectorFrom(b.center)
+                leftPosition = DataConversion.VectorFromNative(j.left.position),
+                rightPosition = DataConversion.VectorFromNative(j.right.position),
+                mousePosition = DataConversion.VectorFromNative(j.mouse.position),
+                leftRotation = DataConversion.QuaternionFromNative(j.left.rotation),
+                rightRotation = DataConversion.QuaternionFromNative(j.right.rotation),
+                mouseRotation = DataConversion.QuaternionFromNative(j.mouse.rotation),
             };
         }
 
@@ -496,12 +440,12 @@ namespace Vircadia
         {
             return new VircadiaNative.avatar_hand_controllers {
                 left = new VircadiaNative.vantage {
-                    position = NativeVectorFrom(c.leftPosition),
-                    rotation = NativeQuaternionFrom(c.leftRotation),
+                    position = DataConversion.NativeVectorFrom(c.leftPosition),
+                    rotation = DataConversion.NativeQuaternionFrom(c.leftRotation),
                 },
                 right = new VircadiaNative.vantage {
-                    position = NativeVectorFrom(c.rightPosition),
-                    rotation = NativeQuaternionFrom(c.rightRotation),
+                    position = DataConversion.NativeVectorFrom(c.rightPosition),
+                    rotation = DataConversion.NativeQuaternionFrom(c.rightRotation),
                 }
             };
         }
@@ -524,16 +468,16 @@ namespace Vircadia
         {
             return new VircadiaNative.far_grab_joints {
                 left = new VircadiaNative.vantage {
-                    position = NativeVectorFrom(j.leftPosition),
-                    rotation = NativeQuaternionFrom(j.leftRotation),
+                    position = DataConversion.NativeVectorFrom(j.leftPosition),
+                    rotation = DataConversion.NativeQuaternionFrom(j.leftRotation),
                 },
                 right = new VircadiaNative.vantage {
-                    position = NativeVectorFrom(j.rightPosition),
-                    rotation = NativeQuaternionFrom(j.rightRotation),
+                    position = DataConversion.NativeVectorFrom(j.rightPosition),
+                    rotation = DataConversion.NativeQuaternionFrom(j.rightRotation),
                 },
                 mouse = new VircadiaNative.vantage {
-                    position = NativeVectorFrom(j.mousePosition),
-                    rotation = NativeQuaternionFrom(j.mouseRotation),
+                    position = DataConversion.NativeVectorFrom(j.mousePosition),
+                    rotation = DataConversion.NativeQuaternionFrom(j.mouseRotation),
                 }
             };
         }
@@ -811,7 +755,7 @@ namespace Vircadia
 
                     if (flags.translation_is_default == 0)
                     {
-                        joints[i].position = AvatarUtils.VectorFromNative(joint.position);
+                        joints[i].position = DataConversion.VectorFromNative(joint.position);
                     }
                     else
                     {
@@ -820,7 +764,7 @@ namespace Vircadia
 
                     if (flags.rotation_is_default == 0)
                     {
-                        joints[i].rotation = AvatarUtils.QuaternionFromNative(joint.rotation);
+                        joints[i].rotation = DataConversion.QuaternionFromNative(joint.rotation);
                     }
                     else
                     {
@@ -838,7 +782,7 @@ namespace Vircadia
                     attachments[i].jointName = Marshal.PtrToStringAnsi(attachment.joint_name);
                     if (attachment.is_soft == 0)
                     {
-                        attachments[i].transform = AvatarUtils.TransformFromNative(attachment.transform);
+                        attachments[i].transform = DataConversion.TransformFromNative(attachment.transform);
                     }
                 }
 
@@ -848,7 +792,7 @@ namespace Vircadia
                     VircadiaNative.avatar_bone bone =
                         VircadiaNative.Avatars.vircadia_get_avatar_bone(_context, index, i).result;
                     bones[i].type = (BoneType) bone.type;
-                    bones[i].defaultTransform = AvatarUtils.TransformFromNative(bone.default_transform);
+                    bones[i].defaultTransform = DataConversion.TransformFromNative(bone.default_transform);
                     bones[i].index = bone.index;
                     bones[i].parentIndex = bone.parent_index;
                     bones[i].name = Marshal.PtrToStringAnsi(bone.name);
@@ -862,8 +806,8 @@ namespace Vircadia
                     grabs[i].id = Utils.getUUID(grab.id).Value;
                     grabs[i].data.target = new Guid(grab.result.target_id);
                     grabs[i].data.jointIndex = grab.result.joint_index;
-                    grabs[i].data.translation = AvatarUtils.VectorFromNative(grab.result.offset.position);
-                    grabs[i].data.rotation = AvatarUtils.QuaternionFromNative(grab.result.offset.rotation);
+                    grabs[i].data.translation = DataConversion.VectorFromNative(grab.result.offset.position);
+                    grabs[i].data.rotation = DataConversion.QuaternionFromNative(grab.result.offset.rotation);
                 }
 
                 data.id = id.Value;
@@ -872,16 +816,16 @@ namespace Vircadia
                 data.verificationFailed = verificationFailed == 1;
                 data.attachments = attachments;
                 data.skeletonModelUrl = skeletonModelUrl;
-                data.globalPosition = AvatarUtils.VectorFromNative(globalPosition.Value);
-                data.orientation = AvatarUtils.QuaternionFromNative(orientation.Value);
+                data.globalPosition = DataConversion.VectorFromNative(globalPosition.Value);
+                data.orientation = DataConversion.QuaternionFromNative(orientation.Value);
                 data.scale = scale.Value;
-                data.bounds = AvatarUtils.BoundsFromNative(bounds.Value);
-                data.lookAtPosition = AvatarUtils.VectorFromNative(lookAtPosition.Value);
+                data.bounds = DataConversion.BoundsFromNative(bounds.Value);
+                data.lookAtPosition = DataConversion.VectorFromNative(lookAtPosition.Value);
                 data.audioLoudness = audioLoudness.Value;
-                data.sensorToWorld = AvatarUtils.TransformFromNative(sensorToWorld.Value);
+                data.sensorToWorld = DataConversion.TransformFromNative(sensorToWorld.Value);
                 data.additionalFlags = AvatarUtils.AdditionalFlagsFromNative(additionalFlags.Value);
                 data.parent = new AvatarParentInfo { id = new Guid(parentInfo.Value.uuid), jointIndex = parentInfo.Value.joint_index };
-                data.localPosition = AvatarUtils.VectorFromNative(localPosition.Value);
+                data.localPosition = DataConversion.VectorFromNative(localPosition.Value);
                 data.handControllers = AvatarUtils.HandControllersFromNative(handControllers.Value);
                 data.faceTrackerInfo = AvatarUtils.FaceTrackerInfoFromNative(faceTrackerInfo.Value);
                 data.grabJoints = AvatarUtils.GrabJointsFromNative(grabJoints.Value);
@@ -1053,7 +997,7 @@ namespace Vircadia
         public void SendGlobalPosition(Vector3 globalPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_global_position(
-                _context, AvatarUtils.NativeVectorFrom(globalPosition));
+                _context, DataConversion.NativeVectorFrom(globalPosition));
         }
 
         /// <summary>
@@ -1065,7 +1009,7 @@ namespace Vircadia
         public void SendOrientation(Quaternion orientation)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_orientation(
-                _context, AvatarUtils.NativeQuaternionFrom(orientation));
+                _context, DataConversion.NativeQuaternionFrom(orientation));
         }
 
         /// <summary>
@@ -1088,7 +1032,7 @@ namespace Vircadia
         public void SendBounds(Bounds bounds)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_bounding_box(
-                _context, AvatarUtils.NativeBoundsFrom(bounds));
+                _context, DataConversion.NativeBoundsFrom(bounds));
         }
 
         /// <summary>
@@ -1100,7 +1044,7 @@ namespace Vircadia
         public void SendLookAtPosition(Vector3 lookAtPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_look_at(
-                _context, AvatarUtils.NativeVectorFrom(lookAtPosition));
+                _context, DataConversion.NativeVectorFrom(lookAtPosition));
         }
 
         /// <summary>
@@ -1127,7 +1071,7 @@ namespace Vircadia
         public void SendSensorToWorldTreansform(Transform transform)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_sensor_to_world(
-                _context, AvatarUtils.NativeTransformFrom(transform));
+                _context, DataConversion.NativeTransformFrom(transform));
         }
 
         /// <summary>
@@ -1165,7 +1109,7 @@ namespace Vircadia
         public void SendLocalPosition(Vector3 localPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_local_position(
-                _context, AvatarUtils.NativeVectorFrom(localPosition));
+                _context, DataConversion.NativeVectorFrom(localPosition));
         }
 
         /// <summary>
@@ -1221,10 +1165,8 @@ namespace Vircadia
                 var position = pose[i].position ?? new Vector3();
                 var rotation = pose[i].rotation ?? new Quaternion();
                 VircadiaNative.Avatars.vircadia_set_my_avatar_joint(_context, i, new VircadiaNative.vantage{
-                    position = new VircadiaNative.vector{
-                        x = position.x, y = position.y, z = position.z},
-                    rotation = new VircadiaNative.quaternion{
-                        x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w}
+                    position = DataConversion.NativeVectorFrom(position),
+                    rotation = DataConversion.NativeQuaternionFrom(rotation)
                 });
                 VircadiaNative.Avatars.vircadia_set_my_avatar_joint_flags(_context, i, new VircadiaNative.joint_flags{
                     translation_is_default = (byte) (pose[i].position == null ? 1 : 0),
@@ -1256,7 +1198,7 @@ namespace Vircadia
                 VircadiaNative.Avatars.vircadia_set_my_avatar_attachment(_context, i, new VircadiaNative.avatar_attachment{
                     model_url = modelUrl,
                     joint_name = jointName,
-                    transform = AvatarUtils.NativeTransformFrom(transform),
+                    transform = DataConversion.NativeTransformFrom(transform),
                     is_soft = (byte) (attachments[i].transform == null ? 1 : 0)
                 });
 
@@ -1283,7 +1225,7 @@ namespace Vircadia
 
                 VircadiaNative.Avatars.vircadia_set_my_avatar_bone(_context, i, new VircadiaNative.avatar_bone{
                     type = (byte) bone.type,
-                    default_transform = AvatarUtils.NativeTransformFrom(bone.defaultTransform),
+                    default_transform = DataConversion.NativeTransformFrom(bone.defaultTransform),
                     index = bone.index,
                     parent_index = bone.parentIndex,
                     name = namePtr
@@ -1305,8 +1247,8 @@ namespace Vircadia
                 target_id = data.target.ToByteArray(),
                 joint_index = data.jointIndex,
                 offset = new VircadiaNative.vantage {
-                    position = AvatarUtils.NativeVectorFrom(data.translation),
-                    rotation = AvatarUtils.NativeQuaternionFrom(data.rotation)
+                    position = DataConversion.NativeVectorFrom(data.translation),
+                    rotation = DataConversion.NativeQuaternionFrom(data.rotation)
                 }
             });
         }
@@ -1348,13 +1290,13 @@ namespace Vircadia
             for (int i = 0; i < cameraViews.Length; ++i)
             {
                 VircadiaNative.Avatars.vircadia_set_avatar_view_corners(_context, i, new VircadiaNative.view_frustum_corners {
-                    position = AvatarUtils.NativeVectorFrom(cameraViews[i].position),
+                    position = DataConversion.NativeVectorFrom(cameraViews[i].position),
                     radius = cameraViews[i].radius,
                     far_clip = cameraViews[i].farClip,
-                    near_top_left = AvatarUtils.NativeVectorFrom(cameraViews[i].nearCorners[0]),
-                    near_top_right = AvatarUtils.NativeVectorFrom(cameraViews[i].nearCorners[1]),
-                    near_bottom_right = AvatarUtils.NativeVectorFrom(cameraViews[i].nearCorners[2]),
-                    near_bottom_left = AvatarUtils.NativeVectorFrom(cameraViews[i].nearCorners[3]),
+                    near_top_left = DataConversion.NativeVectorFrom(cameraViews[i].nearCorners[0]),
+                    near_top_right = DataConversion.NativeVectorFrom(cameraViews[i].nearCorners[1]),
+                    near_bottom_right = DataConversion.NativeVectorFrom(cameraViews[i].nearCorners[2]),
+                    near_bottom_left = DataConversion.NativeVectorFrom(cameraViews[i].nearCorners[3]),
                 });
             }
         }

@@ -19,7 +19,7 @@ using UnityEngine.TestTools;
 public class DomainServer
 {
     [UnityTest]
-    public IEnumerator ConnectionPasses()
+    public IEnumerator NodeEnumeration()
     {
 
         var domainServer = new Vircadia.DomainServer();
