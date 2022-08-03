@@ -174,6 +174,7 @@ namespace Vircadia
 
             Messages = this._context >= 0 ? new MessagesClient(this) : null;
             Avatar = this._context >= 0 ? new AvatarManager(this) : null;
+            Audio = this._context >= 0 ? new AudioClient(this) : null;
         }
 
         /// <summary>
@@ -311,6 +312,11 @@ namespace Vircadia
         /// Accessor for the avatars functionality of the client.
         /// </summary>
         public AvatarManager Avatar { get; private set; }
+
+        /// <summary>
+        /// Accessor for the audio functionality of the client.
+        /// </summary>
+        public AudioClient Audio { get; private set; }
 
         internal int ContextId {
             get { return _context; }

@@ -12,6 +12,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Vircadia
 {
@@ -70,4 +71,68 @@ namespace Vircadia
         }
 
     }
+
+    internal static class DataConversion {
+
+        internal static Vector3 VectorFromNative(VircadiaNative.vector v)
+        {
+            return new Vector3(v.x, v.y, v.z);
+        }
+
+        internal static Quaternion QuaternionFromNative(VircadiaNative.quaternion q)
+        {
+            return new Quaternion(q.x, q.y, q.z, q.w);
+        }
+
+        internal static Transform TransformFromNative(VircadiaNative.transform t)
+        {
+            return new Transform {
+                translation = VectorFromNative(t.vantage.position),
+                rotation = QuaternionFromNative(t.vantage.rotation),
+                scale = t.scale,
+            };
+        }
+
+        internal static Bounds BoundsFromNative(VircadiaNative.bounds b)
+        {
+            Vector3 offset = VectorFromNative(b.offset);
+            Vector3 dimensions = VectorFromNative(b.dimensions);
+            return new Bounds(offset + dimensions/2, dimensions);
+        }
+
+        internal static VircadiaNative.vector NativeVectorFrom(Vector3 v)
+        {
+            return new VircadiaNative.vector {
+                x = v.x, y = v.y, z = v.z
+            };
+        }
+
+        internal static VircadiaNative.quaternion NativeQuaternionFrom(Quaternion q)
+        {
+            return new VircadiaNative.quaternion {
+                x = q.x, y = q.y, z = q.z, w = q.w
+            };
+        }
+
+        internal static VircadiaNative.transform NativeTransformFrom(Transform t)
+        {
+            return new VircadiaNative.transform {
+                vantage = new VircadiaNative.vantage {
+                    position = NativeVectorFrom(t.translation),
+                    rotation = NativeQuaternionFrom(t.rotation),
+                },
+                scale = t.scale
+            };
+        }
+
+        internal static VircadiaNative.bounds NativeBoundsFrom(Bounds b)
+        {
+            return new VircadiaNative.bounds {
+                dimensions = NativeVectorFrom(b.size),
+                offset = NativeVectorFrom(b.min)
+            };
+        }
+
+    }
+
 }
