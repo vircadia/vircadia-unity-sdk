@@ -1,6 +1,6 @@
-### Vircadia Unity SDK
+### Overview
 
-This is a native plugin for Unity 3D engine to support development of client applications for Vircadia Open Source Metaverse Platform. The project itself serves as an example, with the SDK set up as an embedded plugin.
+[Vircadia Unity SDK](https://github.com/vircadia/vircadia-unity-sdk) is a native plugin for Unity 3D engine to support development of client applications for Vircadia Open Source Metaverse Platform. The project itself serves as an example, with the SDK set up as an embedded plugin.
 
 ### Getting Started
 
