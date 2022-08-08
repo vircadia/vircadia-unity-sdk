@@ -5,17 +5,17 @@ BUILDDIR = ./build
 UNITY3D = $(UNITY3D_PATH)/Editor/Unity
 
 build:
-	$(UNITY3D) -batchmode -nographics -quit -buildLinux64Player "$(BUILDDIR)/app" -logfile -
+	$(UNITY3D) -projectPath . -batchmode -nographics -quit -buildLinux64Player "$(BUILDDIR)/app" -logfile -
 
 run:
 	cd $(BUILDDIR); ./app -screen-fullscreen 0 -screen-height 600 -screen-width 800 -logfile -
 
 debug:
-	$(UNITY3D) -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
+	$(UNITY3D) -projectPath . -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile -
 
 test:
 	@echo Running tests...
-	-@$(UNITY3D) -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile - 2> /dev/null | grep VIRCADIA_SDK_TEST_LOG
+	@$(UNITY3D) -projectPath . -runTests -batchmode -nographics -testPlatform playmode -testResults $(TEST_RESULT) -logfile - 2> /dev/null | grep VIRCADIA_SDK_TEST_LOG
 	@xmlstarlet sel -t -m '//message[1]' -v . -n < $(TEST_RESULT) || true
 	@xmlstarlet sel -t -m '//stack-trace[1]' -v . -n < $(TEST_RESULT) || true
 	@echo Complete.
