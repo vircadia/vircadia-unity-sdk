@@ -271,8 +271,8 @@ namespace Vircadia
         /// <summary>
         /// Sets the position and orientation of the audio client.
         /// </summary>
-        /// <param name="trandform">
-        /// Linear transformtion that determines the position and orientation.
+        /// <param name="transform">
+        /// Linear transformation that determines the position and orientation.
         /// The scale is ignored.
         /// </param>
         public void SetTransform(Transform transform)
@@ -301,7 +301,7 @@ namespace Vircadia
         /// StartInput </see> will be set to valid handle once it's ready.
         /// Subsequent calls to StartInput will invalidate the current handle
         /// and set this to property to null, until a new handle is ready. <see
-        /// cref="Vircadia.AudioClient.Update"> Update <.see> method must be
+        /// cref="Vircadia.AudioClient.Update"> Update </see> method must be
         /// called to update this property. Alternatively the <see
         /// cref="Vircadia.AudioClient.InputReady"> InputReady </see> event can
         /// be used, retrieve the same handle.
@@ -314,7 +314,7 @@ namespace Vircadia
         /// StartOutput </see> will be set to valid handle once it's ready.
         /// Subsequent calls to StartOutput will invalidate the current handle
         /// and set this to property to null, until a new handle is ready. <see
-        /// cref="Vircadia.AudioClient.Update"> Update <.see> method must be
+        /// cref="Vircadia.AudioClient.Update"> Update </see> method must be
         /// called to update this property. Alternatively the <see
         /// cref="Vircadia.AudioClient.OutputReady"> OutputReady </see> event
         /// can be used, retrieve the same handle.
