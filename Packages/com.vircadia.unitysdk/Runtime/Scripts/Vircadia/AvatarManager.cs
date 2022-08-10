@@ -87,10 +87,25 @@ namespace Vircadia
     /// </summary>
     public enum BoneType : byte
     {
-        // TODO: documentation
+        // TODO: documentation in more detail
+        /// <summary>
+        /// Skeleton root bone.
+        /// </summary>
         SkeletonRoot,
+
+        /// <summary>
+        /// Skeleton child bone.
+        /// </summary>
         SkeletonChild,
+
+        /// <summary>
+        /// Non-skeleton root bone.
+        /// </summary>
         NonSkeletonRoot,
+
+        /// <summary>
+        /// Non-skeleton child bone.
+        /// </summary>
         NonSkeletonChild
     }
 
@@ -605,7 +620,7 @@ namespace Vircadia
         public AvatarGrabJoints grabJoints;
 
         /// <summary>
-        /// The current pose of the avatar.
+        /// The current pose of the avatar. Maximum number of joints is 256.
         /// </summary>
         public Joint[] pose;
 
@@ -637,7 +652,7 @@ namespace Vircadia
 
 
     /// <summary>
-    /// A handle for receiving avatar data from another clients.
+    /// A handle for receiving avatar data from other clients.
     /// </summary>
     public class Avatar {
 

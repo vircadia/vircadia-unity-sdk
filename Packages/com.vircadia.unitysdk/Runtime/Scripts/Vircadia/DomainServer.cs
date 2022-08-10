@@ -21,18 +21,69 @@ namespace Vircadia
     /// </summary>
     public enum NodeType : byte
     {
+        /// <summary>
+        /// Domain server (Vircadia.DomainServer).
+        /// </summary>
         DomainServer = (byte)'D',
+
+        /// <summary>
+        /// Entity server.
+        /// </summary>
         EntityServer = (byte)'o',
+
+        /// <summary>
+        /// Agent.
+        /// </summary>
         Agent = (byte)'I',
+
+        /// <summary>
+        /// Audio mixer (Vircadia.DomainServer.Audio).
+        /// </summary>
         AudioMixer = (byte)'M',
+
+        /// <summary>
+        /// Avatar mixer (Vircadia.DomainServer.Avatar).
+        /// </summary>
         AvatarMixer = (byte)'W',
+
+        /// <summary>
+        /// Asset server.
+        /// </summary>
         AssetServer = (byte)'A',
+
+        /// <summary>
+        /// Message mixer (Vircadia.DomainServer.Messages).
+        /// </summary>
         MessagesMixer = (byte)'m',
+
+        /// <summary>
+        /// Entity script server.
+        /// </summary>
         EntityScriptServer = (byte)'S',
+
+        /// <summary>
+        /// Upstream audio mixer.
+        /// </summary>
         UpstreamAudioMixer = (byte)'B',
+
+        /// <summary>
+        /// Upstream avatar mixer.
+        /// </summary>
         UpstreamAvatarMixer = (byte)'C',
+
+        /// <summary>
+        /// Downstream audio mixer.
+        /// </summary>
         DownstreamAudioMixer = (byte)'a',
+
+        /// <summary>
+        /// Downstream avatar mixer.
+        /// </summary>
         DownstreamAvatarMixer = (byte)'w',
+
+        /// <summary>
+        /// Unassigned.
+        /// </summary>
         Unassigned = 1
     }
 
