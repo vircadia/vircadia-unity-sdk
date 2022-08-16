@@ -1,3 +1,5 @@
+# Release Notes
+
 ## Version 2022.0.2
 
 ### Features
