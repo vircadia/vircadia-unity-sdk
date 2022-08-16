@@ -3,6 +3,7 @@ PACKAGE = com.vircadia.unitysdk.tgz
 BUILDDIR = ./build
 
 UNITY3D = $(UNITY3D_PATH)/Editor/Unity
+DOXYGEN = doxygen
 
 build:
 	$(UNITY3D) -projectPath . -batchmode -nographics -quit -buildLinux64Player "$(BUILDDIR)/app" -logfile -
@@ -20,13 +21,18 @@ test:
 	@xmlstarlet sel -t -m '//stack-trace[1]' -v . -n < $(TEST_RESULT) || true
 	@echo Complete.
 
-package: test
+docs:
+	-@rm -r ./docs/html ./docs/latex 2> /dev/null || true
+	$(DOXYGEN) ./docs/Doxyfile
+	-@rm -r Packages/com.vircadia.unitysdk/Documentation/html 2> /dev/null || true
+	-@mkdir Packages/com.vircadia.unitysdk/Documentation 2> /dev/null || true
+	cp ./docs/html Packages/com.vircadia.unitysdk/Documentation/ -r
+
+package: docs test
+	-rm ${PACKAGE}
 	-rm -r Packages/com.vircadia.unitysdk/Samples~
 	cp Assets/Samples Packages/com.vircadia.unitysdk/Samples~ -r
 	tar --transform="s/Packages\/com.vircadia.unitysdk/package/" -czvf ${PACKAGE} Packages/com.vircadia.unitysdk
-
-docs:
-	doxygen ./docs/Doxyfile
 
 clean-tests:
 	-rm $(TEST_RESULT)
@@ -36,6 +42,5 @@ clean-package:
 
 clean-build:
 	-rm -rf $(BUILDDIR)
-
 
 .PHONY: build run debug test package docs clean-tests clean-package clean-build
