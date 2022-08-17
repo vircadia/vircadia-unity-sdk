@@ -42,12 +42,12 @@ namespace Vircadia
         public string commit;
 
         /// <summary>
-        /// Formatted version number string, contains <see cref="P:Vircadia.Info.VersionData.major">major</see> and <see cref="P:Vircadia.Info.VersionData.minor">minor</see>.
+        /// Formatted version number string, contains <see cref="Vircadia.VersionData.major">major</see> and <see cref="Vircadia.VersionData.minor">minor</see>.
         /// </summary>
         public string number;
 
         /// <summary>
-        /// Formatted version string, contains <see cref="P:Vircadia.Info.VersionData.year">year</see>, <see cref="P:Vircadia.Info.VersionData.major">major</see>, <see cref="P:Vircadia.Info.VersionData.minor">minor</see> and <see cref="P:Vircadia.Info.VersionData.commit">commit</see>.
+        /// Formatted version string, contains <see cref="Vircadia.VersionData.year">year</see>, <see cref="Vircadia.VersionData.major">major</see>, <see cref="Vircadia.VersionData.minor">minor</see> and <see cref="Vircadia.VersionData.commit">commit</see>.
         /// </summary>
         public string full;
     }

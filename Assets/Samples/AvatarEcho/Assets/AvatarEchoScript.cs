@@ -1,6 +1,6 @@
 //
-//  AvatarsScript.cs
-//  Samples/Avatars
+//  AvatarEchoScript.cs
+//  Samples/AvatarEch/Assets
 //
 //  A simple bot that receives commands in chat to copy the user's avatar appearance and movements.
 //
