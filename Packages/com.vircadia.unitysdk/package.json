@@ -1,6 +1,6 @@
 {
   "name": "com.vircadia.unitysdk",
-  "version": "2022.0.2",
+  "version": "2022.0.3",
   "displayName": "Vircadia Unity SDK",
   "description": "SDK for developing client applications for the Vircadia Open Source Metaverse Platform.",
   "samples": [
