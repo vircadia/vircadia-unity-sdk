@@ -352,7 +352,7 @@ namespace Vircadia
         public Vector3[] nearCorners;
 
         /// <summary>
-        /// Constructs a camera view form Unity camera object.
+        /// Constructs a camera view from Unity camera object.
         /// </summary>
         /// <param name="camera">The camera to construct the view from.</param>
         /// <param name="radius">The additional culling radius of the view.</param>
