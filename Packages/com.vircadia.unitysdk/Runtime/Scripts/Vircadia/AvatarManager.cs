@@ -229,7 +229,8 @@ namespace Vircadia
     public struct AvatarParentInfo
     {
         /// <summary>
-        /// The id of the parent.
+        /// The id of the parent. The string representation is different from
+        /// the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid id;
 
@@ -288,7 +289,8 @@ namespace Vircadia
     public struct GrabData
     {
         /// <summary>
-        /// The id of the grabbed object.
+        /// The id of the grabbed object. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid target;
 
@@ -314,7 +316,8 @@ namespace Vircadia
     public struct GrabAction
     {
         /// <summary>
-        /// Represents id the grab action.
+        /// Represents id the grab action. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid id;
 
@@ -517,7 +520,8 @@ namespace Vircadia
     /// </summary>
     public struct AvatarData {
         /// <summary>
-        /// The identifier of the avatar.
+        /// The identifier of the avatar. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid id;
 

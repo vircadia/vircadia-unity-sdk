@@ -51,8 +51,9 @@ namespace Vircadia
         public bool LocalOnly { get; internal set; }
 
         /// <summary>
-        /// A universal unique ID of the message sender (the string
-        /// representation might not match between implementations)
+        /// A universal unique ID of the message sender. The string
+        /// representation is different from the server's, see \ref
+        /// ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid Sender { get; internal set; }
 
