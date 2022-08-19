@@ -109,7 +109,7 @@ namespace Vircadia
         /// Text message type needs to be enabled with <see
         /// cref="Vircadia.MessagesClient.Enable"> Enable </see> method, a
         /// specific channel needs to be subscribed to with <see
-        /// cref="Vircadia.MessagesClient.Subsribe"> Subscribe </see> method,
+        /// cref="Vircadia.MessagesClient.Subscribe"> Subscribe </see> method,
         /// and <see cref="Vircadia.MessagesClient.Update"> Update </see>
         /// method needs to be called for these event to fire.
         /// </summary>
@@ -120,7 +120,7 @@ namespace Vircadia
         /// Text message type needs to be enabled with <see
         /// cref="Vircadia.MessagesClient.Enable"> Enable </see> method, a
         /// specific channel needs to be subscribed to with <see
-        /// cref="Vircadia.MessagesClient.Subsribe"> Subscribe </see> method,
+        /// cref="Vircadia.MessagesClient.Subscribe"> Subscribe </see> method,
         /// and <see cref="Vircadia.MessagesClient.Update"> Update </see>
         /// method needs to be called for these event to fire.
         /// </summary>
@@ -129,7 +129,7 @@ namespace Vircadia
         /// <summary>
         /// Enables handling of specified message types. This will cause
         /// incoming messages (on channels this client <see
-        /// cref="Vircadia.MessagesClient.Subsribe"> subscribed </see> to) to
+        /// cref="Vircadia.MessagesClient.Subscribe"> subscribed </see> to) to
         /// be buffered. The <see cref="Vircadia.MessagesClient.Update"> Update
         /// </see> method must be called periodically afterwards to clear the
         /// internal buffers and deliver events.
@@ -206,7 +206,7 @@ namespace Vircadia
         /// that have been enabled with <see
         /// cref="Vircadia.MessagesClient.Enable"> Enable </see> method, and
         /// channels that have been subscribed to with <see
-        /// cref="Vircadia.MessagesClient.Subsribe"> Subsribe </see> methos.
+        /// cref="Vircadia.MessagesClient.Subscribe"> Subscribe </see> methos.
         /// </summary>
         public void Update()
         {

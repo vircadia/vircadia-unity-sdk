@@ -218,7 +218,7 @@ namespace Vircadia
         /// data in specified format.
         /// <param name="format">
         /// The format of the input audio data. The channel count must be 1 or 2.
-        /// <param>
+        /// </param>
         /// </summary>
         public void StartInput(AudioFormat format)
         {
@@ -232,7 +232,7 @@ namespace Vircadia
         /// completes with <see cref="Vircadia.AudioClient.OutputReady">
         /// OutputReady </see> event, that provides a handle for reading audio
         /// data in specified format.
-        /// <param name="format"> The format of the output audio data. <param>
+        /// <param name="format"> The format of the output audio data. </param>
         /// </summary>
         public void StartOutput(AudioFormat format)
         {
@@ -243,7 +243,7 @@ namespace Vircadia
         /// <summary>
         /// Determines whether the mixer should send the audio input back to
         /// this client. By default input is not sent back.
-        /// <param name="enabled"> true - send input back, false - do not send input back. <param>
+        /// <param name="enabled"> true - send input back, false - do not send input back. </param>
         /// </summary>
         public void SetEcho(bool enabled)
         {
@@ -252,7 +252,7 @@ namespace Vircadia
 
         /// <summary>
         /// Convenience method to mute audio input client side.
-        /// <param name="enabled"> true - input muted, false - input not muted. <param>
+        /// <param name="enabled"> true - input muted, false - input not muted. </param>
         /// </summary>
         public void SetInputMuted(bool enabled)
         {
