@@ -29,7 +29,7 @@ namespace Vircadia
         public enum SampleType : byte
         {
             /// <summary>
-            /// Signed 16 but little endian integer.
+            /// Signed 16 bit little endian integer.
             /// </summary>
             SignedInt16,
 
