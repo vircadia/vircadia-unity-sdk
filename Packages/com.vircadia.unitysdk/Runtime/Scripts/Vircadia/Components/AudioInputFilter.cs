@@ -16,8 +16,8 @@ namespace Vircadia
 {
 
     /// <summary>
-    /// Audio input filter component. This will process audio data and it to
-    /// the mixer. Must be used as a last filter in the chain, as it'll will
+    /// Audio input filter component. This will process audio data and send it
+    /// to the mixer. Must be used as a last filter in the chain, as it'll will
     /// zero out the data read, to prevent playback.
     /// </summary>
     [RequireComponent(typeof(AudioSource))]

@@ -229,7 +229,8 @@ namespace Vircadia
     public struct AvatarParentInfo
     {
         /// <summary>
-        /// The id of the parent.
+        /// The id of the parent. The string representation is different from
+        /// the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid id;
 
@@ -288,7 +289,8 @@ namespace Vircadia
     public struct GrabData
     {
         /// <summary>
-        /// The id of the grabbed object.
+        /// The id of the grabbed object. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid target;
 
@@ -314,7 +316,8 @@ namespace Vircadia
     public struct GrabAction
     {
         /// <summary>
-        /// Represents id the grab action.
+        /// Represents id the grab action. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid id;
 
@@ -352,7 +355,7 @@ namespace Vircadia
         public Vector3[] nearCorners;
 
         /// <summary>
-        /// Constructs a camera view form Unity camera object.
+        /// Constructs a camera view from Unity camera object.
         /// </summary>
         /// <param name="camera">The camera to construct the view from.</param>
         /// <param name="radius">The additional culling radius of the view.</param>
@@ -517,7 +520,8 @@ namespace Vircadia
     /// </summary>
     public struct AvatarData {
         /// <summary>
-        /// The identifier of the avatar.
+        /// The identifier of the avatar. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid id;
 
@@ -980,7 +984,7 @@ namespace Vircadia
         /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
         /// Update </see> call.
         /// </summary>
-        /// <param name="displayName">The avatar skeleton and model URL to send.</param>
+        /// <param name="skeletonModelUrl">The avatar skeleton and model URL to send.</param>
         public void SendSkeletonModelUrl(string skeletonModelUrl)
         {
             IntPtr url = IntPtr.Zero;
@@ -1051,11 +1055,12 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// Set this client's avatar's bounds to send to the server. Sent
+        /// Set this client's avatar's look position (with no eye tracking
+        /// usually the mouse cursor position) to send to the server. Sent
         /// asynchronously after an <see cref="Vircadia.AvatarManager.Update">
         /// Update </see> call.
         /// </summary>
-        /// <param name="bounds">The bounds to send.</param>
+        /// <param name="lookAtPosition">The position the avatar is looking at.</param>
         public void SendLookAtPosition(Vector3 lookAtPosition)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_look_at(
@@ -1154,11 +1159,11 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// Set this client's avatar's facial animation data to send to the
+        /// Set this client's avatar's far grab joint data to be sent to the
         /// server. Sent asynchronously after an <see
         /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
         /// </summary>
-        /// <param name="faceTrackerInfo">The facial animation data to send.</param>
+        /// <param name="grabJoints">The position and rotation of grab far joints to send.</param>
         public void SendGrabJoints(AvatarGrabJoints grabJoints)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_grab_joints(
@@ -1195,7 +1200,7 @@ namespace Vircadia
         /// Sent asynchronously after an <see
         /// cref="Vircadia.AvatarManager.Update"> Update </see> call. </see>.
         /// </summary>
-        /// <param name="pose">The joint position and rotation array to send.</param>
+        /// <param name="attachments">The array of attachments to send.</param>
         public void SendAttachments(AvatarAttachment[] attachments)
         {
             VircadiaNative.Avatars.vircadia_set_my_avatar_attachment_count(_context, attachments.Length);

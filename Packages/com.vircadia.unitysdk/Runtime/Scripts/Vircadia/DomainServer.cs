@@ -105,7 +105,8 @@ namespace Vircadia
     }
 
     /// <summary>
-    /// Node (assignment client) data.
+    /// Node data. The domain server, mixers or other clients are
+    /// represented as nodes in the network.
     /// </summary>
     public struct Node
     {
@@ -125,8 +126,8 @@ namespace Vircadia
         public string address;
 
         /// <summary>
-        /// A universal unique ID of the node (the string representation
-        /// might not match between implementations)
+        /// A universal unique ID of the node. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
         public Guid uuid;
     }
@@ -343,9 +344,10 @@ namespace Vircadia
         }
 
         /// <summary>
-        /// This client's unique identifier.
+        /// This client's unique identifier. The string representation is
+        /// different from the server's, see \ref ./docs/guid.md "Guid notes".
         /// </summary>
-        // TOOD: this requires Nodes getter, since update call is there, that's confusing should probably make it explicit
+        // TOOD: this requires Nodes getter, since update call is there, that's confusing should probably make it explicit.
         public Guid? sessionUUID
         {
             get
